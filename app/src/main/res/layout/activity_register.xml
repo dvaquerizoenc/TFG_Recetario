@@ -5,7 +5,19 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primario"
     tools:context=".activities.RegisterActivity">
+
+    <ImageButton
+        android:id="@+id/btn_atras_register"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/transparente"
+        android:src="@drawable/ic_atras"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
@@ -15,76 +27,115 @@
         android:text="@string/title_register"
         android:textColor="@color/titulos"
         android:textSize="24sp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_atras_register" />
 
-    <EditText
-        android:id="@+id/userNameRegister"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/userNameRegisterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/user_name"
         android:layout_marginTop="24dp"
         android:layout_marginHorizontal="20dp"
-        android:fontFamily="@font/epilogue_regular"
-        android:textSize="16sp"
         android:textColor="@color/texto"
-        android:padding="16dp"
-        android:background="@drawable/edit_text_login"
+        app:hintTextColor="@color/texto"
+        android:textColorHint="@color/texto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-    <EditText
-        android:id="@+id/emailRegister"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login"
+            android:textColor="@color/texto"
+            android:fontFamily="@font/epilogue_regular"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailRegisterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_login"
-        android:fontFamily="@font/epilogue_regular"
         android:hint="@string/email"
-        android:padding="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
         android:textColor="@color/texto"
-        android:textSize="16sp"
+        app:hintTextColor="@color/texto"
+        android:textColorHint="@color/texto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameRegisterLayout">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/passwordRegister"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login"
+            android:textColor="@color/texto"
+            android:fontFamily="@font/epilogue_regular"
+            android:textSize="16sp"
+            android:inputType="textEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordRegisterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_login"
-        android:fontFamily="@font/epilogue_regular"
         android:hint="@string/pass"
-        android:inputType="textPassword"
-        android:padding="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
         android:textColor="@color/texto"
-        android:textSize="16sp"
+        app:hintTextColor="@color/texto"
+        android:textColorHint="@color/texto"
+        app:endIconMode="password_toggle"
+        app:endIconDrawable="@drawable/ic_eye_selector"
+        app:endIconTint="@color/texto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/emailRegisterLayout">
 
-    <EditText
-        android:id="@+id/confirmPasswordRegister"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login"
+            android:textColor="@color/texto"
+            android:fontFamily="@font/epilogue_regular"
+            android:textSize="16sp"
+            android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPasswordRegisterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_login"
-        android:fontFamily="@font/epilogue_regular"
         android:hint="@string/confirm_password"
-        android:inputType="textPassword"
-        android:padding="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
         android:textColor="@color/texto"
-        android:textSize="16sp"
+        app:hintTextColor="@color/texto"
+        android:textColorHint="@color/texto"
+        app:endIconMode="password_toggle"
+        app:endIconDrawable="@drawable/ic_eye_selector"
+        app:endIconTint="@color/texto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordRegisterLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login"
+            android:textColor="@color/texto"
+            android:fontFamily="@font/epilogue_regular"
+            android:textSize="16sp"
+            android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textView5"
@@ -100,7 +151,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordRegisterLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/materialButton"
@@ -120,7 +171,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/tvCrearCuenta"
+        android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/epilogue_bold"

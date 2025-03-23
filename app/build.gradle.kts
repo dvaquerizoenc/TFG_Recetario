@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -47,5 +48,6 @@ dependencies {
     implementation(libs.material.v170)
     implementation(libs.glide)
     implementation(libs.flexbox)
-
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.analytics)
 }

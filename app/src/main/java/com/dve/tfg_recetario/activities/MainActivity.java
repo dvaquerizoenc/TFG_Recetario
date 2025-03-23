@@ -171,15 +171,5 @@ public class MainActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        int nightModeFlags = newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES || nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
-            recreate(); // ⚠️ Esto hace que se aplique el nuevo tema
-        }
-    }
 
 }

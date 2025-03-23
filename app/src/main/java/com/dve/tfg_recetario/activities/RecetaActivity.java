@@ -89,7 +89,9 @@ public class RecetaActivity extends AppCompatActivity {
         rvIngredientes.setLayoutManager(layoutManagerIngredientes);
 
         List<Ingrediente> listaIngredientes = new ArrayList<>();
-        for(int i = 0; i < receta.getIngredientes().size(); i++) {
+        int minSize = Math.min(receta.getIngredientes().size(), receta.getMedidas().size());
+
+        for(int i = 0; i < minSize; i++) {
             Ingrediente ingrediente = new Ingrediente();
             ingrediente.setImg("https://www.themealdb.com/images/ingredients/"+ receta.getIngredientes().get(i).replace(" ","%20") +".png");
             ingrediente.setIngrediente(receta.getIngredientes().get(i));

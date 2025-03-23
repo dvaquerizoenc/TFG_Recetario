@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "997015013427",
+    "project_id": "tfg-recetario",
+    "storage_bucket": "tfg-recetario.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997015013427:android:df9c7bb2238b3875a8bb46",
+        "android_client_info": {
+          "package_name": "com.dve.tfg_recetario"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM_n_Oeb136rGJHZ31r7miFfs95StaaZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
