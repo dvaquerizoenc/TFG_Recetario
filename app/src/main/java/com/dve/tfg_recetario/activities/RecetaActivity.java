@@ -115,12 +115,6 @@ public class RecetaActivity extends AppCompatActivity {
 
         Spanned textoFormateado = Html.fromHtml(instrucciones, Html.FROM_HTML_MODE_LEGACY);
         tvInstrucciones.setText(textoFormateado);
-
-        MaterialButton btnStartCoocking = findViewById(R.id.btnStartCoocking);
-        btnStartCoocking.setOnClickListener(view -> {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        });
     }
 
     public void loadDialog(int duracion) {

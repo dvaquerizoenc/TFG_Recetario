@@ -30,6 +30,8 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText email;
     TextInputEditText password;
 
+    TextView forgotPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.signing_btn);
         email = findViewById(R.id.email_signin);
         password = findViewById(R.id.password_signin);
+        forgotPassword = findViewById(R.id.forgot_password);
 
         auth = FirebaseAuth.getInstance();
 
@@ -71,7 +74,22 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "The email field cannot be empty", Toast.LENGTH_SHORT).show();
             }
+        });
 
+        forgotPassword.setOnClickListener(view -> {
+            String emailText = email.getText().toString();
+            if (!emailText.isBlank()) {
+                auth.sendPasswordResetEmail(emailText)
+                        .addOnCompleteListener(task -> {
+                           if (task.isSuccessful()) {
+                               Toast.makeText(LoginActivity.this, "Reset password email sent", Toast.LENGTH_SHORT).show();
+                           } else {
+                               Toast.makeText(LoginActivity.this, "Error sending reset password email, please try again", Toast.LENGTH_SHORT).show();
+                           }
+                        });
+            } else {
+                Toast.makeText(this, "Enter your email address to reset your password", Toast.LENGTH_SHORT).show();
+            }
         });
 
         Button tvCrearCuenta = findViewById(R.id.tvCrearCuenta);
