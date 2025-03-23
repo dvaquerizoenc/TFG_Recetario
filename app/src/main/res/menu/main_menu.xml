@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_inicio"
+        android:title="@string/menu_inicio"
+        android:icon="@drawable/menu_inicio_selector" />
+
+    <item
+        android:id="@+id/menu_favoritos"
+        android:title="@string/menu_favoritos"
+        android:icon="@drawable/menu_favoritos_selector" />
+
+    <item
+        android:id="@+id/menu_calendario"
+        android:title="@string/menu_calendario"
+        android:icon="@drawable/menu_calendario_selector" />
+
+    <item
+        android:id="@+id/menu_mis_recetas"
+        android:title="@string/menu_mi_recetas"
+        android:icon="@drawable/menu_mis_recetas_selector"
+        />
+
+    <item
+        android:id="@+id/menu_perfil"
+        android:title="@string/menu_perfil"
+        android:icon="@drawable/menu_perfil_selector" />
+</menu>

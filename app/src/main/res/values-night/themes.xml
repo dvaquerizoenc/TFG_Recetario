@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TFG_Recetario" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:statusBarColor">@color/primario</item>
+        <item name="android:navigationBarColor">@color/secundario</item>
+        <item name="android:textColorHint">@color/texto</item>
+        <item name="android:textCursorDrawable">@color/texto</item>
+    </style>
+
+    <!-- Colores modo oscuro -->
+    <color name="primario">#1E1C16</color>
+    <color name="secundario">#2D2A20</color>
+    <color name="titulos">#FAFAFA</color>
+    <color name="texto">#AFAD9E </color>
+    <color name="borde">#56563A</color>
+    <color name="searchView">#3F3B2C</color>
+    <color name="etiquetas">#2D2A20</color>
+    <color name="textBtn">#181611</color>
+
+    <!-- Colores iconos oscuro -->
+    <color name="iconFill">#2D2A20</color>
+    <color name="iconStroke">#AFAD9E</color>
+</resources>

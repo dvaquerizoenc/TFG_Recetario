@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TFG_Recetario" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">@color/primario</item>
+        <item name="android:windowLightStatusBar">@color/titulos</item>
+        <item name="android:navigationBarColor">@color/secundario</item>
+        <item name="android:textColorHint">@color/texto</item>
+        <item name="android:textCursorDrawable">@color/texto</item>
+    </style>
+
+    <style name="Theme.TFG_Recetario" parent="Base.Theme.TFG_Recetario" />
+
+    <!-- Colores modo claro -->
+    <color name="primario">#FAFAFA</color>
+    <color name="secundario">#E1DED5</color>
+    <color name="titulos">#181611</color>
+    <color name="texto">#867D5F</color>
+    <color name="borde">#E0DED6</color>
+    <color name="searchView">#E1DED5</color>
+    <color name="etiquetas">#FAFAFA</color>
+    <color name="textBtn">#181611</color>
+
+    <!-- Colores iconos claro -->
+    <color name="iconFill">#E0DED6</color>
+    <color name="iconStroke">#867D5F</color>
+</resources>
