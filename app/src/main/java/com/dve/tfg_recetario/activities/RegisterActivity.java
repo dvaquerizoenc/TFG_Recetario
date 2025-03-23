@@ -1,23 +1,76 @@
 package com.dve.tfg_recetario.activities;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.dve.tfg_recetario.R;
+import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+
+    private TextInputEditText email;
+    private TextInputEditText password;
+    private TextInputEditText confirmPassword;
+    private TextInputEditText username;
+
+    private MaterialButton btnSignUp;
+
+    private AlertDialog progressDialog;
+
+    String[] meses = {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        email = findViewById(R.id.emailRegister);
+        password = findViewById(R.id.password_register);
+        confirmPassword = findViewById(R.id.confirm_password_register);
+        btnSignUp = findViewById(R.id.sign_up_btn);
+        username = findViewById(R.id.username_register);
 
         ImageButton btnAtras = findViewById(R.id.btn_atras_register);
         Button btnLogin = findViewById(R.id.tvLogin);
@@ -30,5 +83,132 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
 
+        btnSignUp.setOnClickListener(view -> {
+            String usernameText = username.getText().toString();
+            String emailText = email.getText().toString();
+            String passwordText = password.getText().toString();
+            String confirmPasswordText = confirmPassword.getText().toString();
+
+            if (!usernameText.isBlank()) {
+                if (!emailText.isBlank()){
+                    if (emailText.contains("@")){
+                        if (passwordText.equals(confirmPasswordText)) {
+                            if (isPasswordValid(passwordText).equals("OK")) {
+                                loadDialog();
+                                auth.createUserWithEmailAndPassword(emailText, passwordText)
+                                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    FirebaseUser userFb = auth.getCurrentUser();
+                                                    if(userFb!=null){
+                                                        String uid = userFb.getUid();
+                                                        try {
+                                                            // Crear datos del usuario
+                                                            Map<String, Object> usuario = new HashMap<>();
+
+                                                            String fecha = "";
+                                                            Calendar calendar = Calendar.getInstance();
+                                                            fecha = "Joined " + calendar.get(Calendar.YEAR) + " - " + meses[calendar.get(Calendar.MONTH)];
+
+                                                            usuario.put("correo", emailText);
+                                                            usuario.put("nombre", usernameText);
+                                                            usuario.put("fechaCreacion", fecha);
+
+                                                            db.collection("usuarios").document(uid)
+                                                                    .set(usuario)
+                                                                    .addOnSuccessListener(aVoid -> Log.d("SUCCESS", "Usuario agregado con UID: " + uid))
+                                                                    .addOnFailureListener(e -> Log.d("ERROR", "Error al agregar usuario: " + e.getMessage()));
+                                                        } catch (Exception e){
+                                                            Log.d("ERROR:"," "+e.getMessage());
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(RegisterActivity.this, "An error occurred while creating the user, please try again.", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                                    if (user != null) {
+                                                        // Si el usuario ya está autenticado, lo llevamos a MainActivity
+                                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                        Toast.makeText(RegisterActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(this, isPasswordValid(passwordText), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this, "The passwords do not match", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "The email is not valid", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "The email field cannot be empty", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "The username field cannot be empty", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+    }
+
+    public String isPasswordValid(String password) {
+        if (password.length() < 8) {
+            return "The password must be at least 8 characters long.";
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            return "The password must contain at least one uppercase letter.";
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            return "The password must contain at least one number.";
+        }
+
+        return "OK";
+
+    }
+
+    public void loadDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+
+        progressDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        LoadDialog.getInstance().inicializar(progressDialog);
+
+        TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
+
+        if (progressDialog.getWindow() != null) {
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        progressDialog.show();
+
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            int dotCount = 0;
+            @Override
+            public void run() {
+                String dots = new String(new char[dotCount % 4]).replace("\0", ".");
+                tvProgressText.setText(getString(R.string.progress_dialog) + dots);
+                dotCount++;
+                handler.postDelayed(this, 400); // Se repite cada 500ms
+            }
+        };
+
+        handler.post(runnable);
     }
 }

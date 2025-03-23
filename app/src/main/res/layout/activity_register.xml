@@ -47,6 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_login"
@@ -71,6 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/userNameRegisterLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_login"
@@ -99,6 +101,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailRegisterLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_login"
@@ -127,6 +130,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordRegisterLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirm_password_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_login"
@@ -154,7 +158,7 @@
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordRegisterLayout" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
+        android:id="@+id/sign_up_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -183,6 +187,6 @@
         android:background="@color/transparente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
