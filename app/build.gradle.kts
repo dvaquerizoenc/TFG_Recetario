@@ -48,6 +48,6 @@ dependencies {
     implementation(libs.material.v170)
     implementation(libs.glide)
     implementation(libs.flexbox)
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 }
