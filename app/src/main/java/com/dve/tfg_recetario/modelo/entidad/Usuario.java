@@ -11,6 +11,7 @@ public class Usuario {
     private String email;
     private String imagenPerfil;
     private String fechaCreacion;
+    private int tema;
 
     public static Usuario getInstance(){
         if(instance == null) {

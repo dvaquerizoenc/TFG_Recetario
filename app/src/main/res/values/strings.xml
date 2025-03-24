@@ -41,5 +41,11 @@
     <string name="recipes_recently">Your recently viewed recipes</string>
     <string name="modo_oscuro">Dark Theme</string>
     <string name="log_out">Log Out</string>
+    
+    <string name="new_username">Write a new user name</string>
+    <string name="new_username_edittext">New user name</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="save_btn">Save</string>
+    <string name="username_updated">Username updated successfully</string>
 
 </resources>

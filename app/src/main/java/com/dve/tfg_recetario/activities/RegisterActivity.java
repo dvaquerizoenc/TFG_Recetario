@@ -13,13 +13,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import android.content.res.Configuration;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
@@ -33,11 +31,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -117,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                             usuario.put("nombre", usernameText);
                                                             usuario.put("fechaCreacion", fecha);
                                                             usuario.put("imagenPerfil", "https://firebasestorage.googleapis.com/v0/b/tfg-recetario.firebasestorage.app/o/user_default.png?alt=media&token=06d7b771-0291-49f4-815b-cab5b784f432");
+                                                            usuario.put("tema", getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK);
 
                                                             db.collection("usuarios").document(uid)
                                                                     .set(usuario)
@@ -181,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+        View dialogView = inflater.inflate(R.layout.dialog_progress, null);
 
         progressDialog = new AlertDialog.Builder(this)
                 .setView(dialogView)

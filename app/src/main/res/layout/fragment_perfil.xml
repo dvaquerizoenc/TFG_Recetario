@@ -40,7 +40,7 @@
                 android:id="@+id/img_perfil"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter"/>
+                android:scaleType="centerCrop"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -160,6 +160,7 @@
                 android:layout_weight="1" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/darktheme_cb"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:background="@color/transparente"

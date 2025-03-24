@@ -1,26 +1,26 @@
 package com.dve.tfg_recetario.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.fragments.CalendarioFragment;
 import com.dve.tfg_recetario.fragments.FavoritosFragment;
@@ -30,7 +30,6 @@ import com.dve.tfg_recetario.fragments.PerfilFragment;
 import com.dve.tfg_recetario.modelo.entidad.ListaCategorias;
 import com.dve.tfg_recetario.modelo.entidad.ListaRecetasRandom;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
-import com.dve.tfg_recetario.modelo.entidad.Receta;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.dve.tfg_recetario.modelo.negocio.GestorListaCategorias;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
@@ -40,8 +39,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView = null;
@@ -50,19 +47,31 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog progressDialog = null;
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
+    private String lastFragment;
+    private SharedPreferences prefs;
+    private Integer tema;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolean launchedFromScratch = savedInstanceState == null;
 
         bottomNavigationView = findViewById(R.id.menu_bottom);
         fuenteRegular = ResourcesCompat.getFont(this, R.font.epilogue_regular);
         fuenteSeleccionada = ResourcesCompat.getFont(this, R.font.epilogue_bold);
 
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        if (launchedFromScratch) {
+            prefs.edit().remove("last_fragment").apply();
+        }
+        lastFragment = prefs.getString("last_fragment", "Home");
 
+        loadUser();
 
-        loadDialog();
+        if(!lastFragment.equals("Perfil")) {
+            loadDialog();
+        }
 
         initBottomNV();
         ListaRecetasRandom.getInstance().inicializar();
@@ -106,18 +115,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        db = FirebaseFirestore.getInstance();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        db.collection("usuarios").document(currentUser.getUid()).get()
-                .addOnCompleteListener(task -> {
-                    Usuario user = Usuario.getInstance();
-                    user.setImagenPerfil(task.getResult().getString("imagenPerfil"));
-                    user.setNombre("@"+task.getResult().getString("nombre"));
-                    user.setFechaCreacion(task.getResult().getString("fechaCreacion"));
-                    user.setEmail(task.getResult().getString("email"));
-                });
-        
     }
 
     @Override
@@ -132,7 +129,11 @@ public class MainActivity extends AppCompatActivity {
         GestorListaCategorias.getInstance().initListaCategorias(new ApiCallback() {
             @Override
             public void onTaskCompleted(String result) {
-                cambiarFragment(new InicioFragment(progressDialog));
+                if(lastFragment.equals("Perfil")) {
+                    cambiarFragment(new PerfilFragment());
+                } else {
+                    cambiarFragment(new InicioFragment(progressDialog));
+                }
             }
         });
     }
@@ -150,14 +151,16 @@ public class MainActivity extends AppCompatActivity {
     }
     
     public void cambiarFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_view, fragment);
-        transaction.commit();
+        if (!isFinishing() && !isDestroyed()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_view, fragment);
+            transaction.commit();
+        }
     }
 
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.progress_dialog, null);
+        View dialogView = inflater.inflate(R.layout.dialog_progress, null);
 
         progressDialog = new AlertDialog.Builder(this)
                 .setView(dialogView)
@@ -189,5 +192,24 @@ public class MainActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
+    private void loadUser() {
+        db = FirebaseFirestore.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        db.collection("usuarios").document(currentUser.getUid()).get()
+                .addOnCompleteListener(task -> {
+                    Usuario user = Usuario.getInstance();
+                    user.setImagenPerfil(task.getResult().getString("imagenPerfil"));
+                    user.setNombre("@"+task.getResult().getString("nombre"));
+                    user.setFechaCreacion(task.getResult().getString("fechaCreacion"));
+                    user.setEmail(task.getResult().getString("email"));
+                    user.setTema(Integer.parseInt(String.valueOf(task.getResult().getLong("tema"))));
+
+                    if (user.getTema() == 32) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                });
+    }
 }

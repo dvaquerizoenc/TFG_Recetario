@@ -94,7 +94,15 @@ public class AdaptadorRecetasInicio extends RecyclerView.Adapter<AdaptadorReceta
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.dismiss();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        try {
+                            progressDialog.dismiss();
+                        } catch (IllegalArgumentException e) {
+                            Log.d("EXCEPTION", ""+e.getMessage());
+                        } catch (Exception e) {
+                            Log.d("EXCEPTION", ""+e.getMessage());
+                        }
+                    }
                 }
             }, 400);
         }
