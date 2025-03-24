@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.fragments.CalendarioFragment;
 import com.dve.tfg_recetario.fragments.FavoritosFragment;
@@ -30,20 +31,25 @@ import com.dve.tfg_recetario.modelo.entidad.ListaCategorias;
 import com.dve.tfg_recetario.modelo.entidad.ListaRecetasRandom;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
+import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.dve.tfg_recetario.modelo.negocio.GestorListaCategorias;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
 import com.dve.tfg_recetario.modelo.servicio.ApiCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView = null;
-    Typeface fuenteRegular = null;
-    Typeface fuenteSeleccionada = null;
-    AlertDialog progressDialog = null;
-
+    private BottomNavigationView bottomNavigationView = null;
+    private Typeface fuenteRegular = null;
+    private Typeface fuenteSeleccionada = null;
+    private AlertDialog progressDialog = null;
+    private FirebaseFirestore db;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +105,18 @@ public class MainActivity extends AppCompatActivity {
 
             return false;
         });
+
+        db = FirebaseFirestore.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        db.collection("usuarios").document(currentUser.getUid()).get()
+                .addOnCompleteListener(task -> {
+                    Usuario user = Usuario.getInstance();
+                    user.setImagenPerfil(task.getResult().getString("imagenPerfil"));
+                    user.setNombre("@"+task.getResult().getString("nombre"));
+                    user.setFechaCreacion(task.getResult().getString("fechaCreacion"));
+                    user.setEmail(task.getResult().getString("email"));
+                });
         
     }
 

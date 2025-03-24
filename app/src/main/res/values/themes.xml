@@ -8,6 +8,14 @@
         <item name="android:navigationBarColor">@color/secundario</item>
         <item name="android:textColorHint">@color/texto</item>
         <item name="android:textCursorDrawable">@color/texto</item>
+        <item name="colorControlActivated">@color/titulos</item>
+        <item name="checkboxStyle">@style/CheckBoxStyle</item>
+    </style>
+
+    <style name="CheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/titulos</item>
+        <item name="android:button">@drawable/ic_darktheme</item>
+        <item name="android:colorControlActivated">@color/titulos</item>
     </style>
 
     <style name="Theme.TFG_Recetario" parent="Base.Theme.TFG_Recetario" />

@@ -9,15 +9,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.activities.LoginActivity;
+import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PerfilFragment extends Fragment {
 
-    private TextView cerrarSesion;
+    private LinearLayout cerrarSesion;
+    private ImageView imagenPerfil;
+    private TextView userName;
+    private TextView fechJoin;
+    private Usuario user;
 
     public PerfilFragment() {
         // Required empty public constructor
@@ -46,7 +56,16 @@ public class PerfilFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        cerrarSesion = view.findViewById(R.id.cerrar_sesion);
+        cerrarSesion = view.findViewById(R.id.logout_layout);
+        imagenPerfil = view.findViewById(R.id.img_perfil);
+        userName = view.findViewById(R.id.username_perfil);
+        fechJoin = view.findViewById(R.id.fech_join_perfil);
+
+        user = Usuario.getInstance();
+
+        Glide.with(imagenPerfil.getContext()).load(user.getImagenPerfil()).into(imagenPerfil);
+        userName.setText(user.getNombre());
+        fechJoin.setText(user.getFechaCreacion());
 
         cerrarSesion.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();

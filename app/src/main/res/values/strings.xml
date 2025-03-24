@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TFG_Recetario</string>
+    <string name="app_name">TasteUp</string>
 
     <!-- Login -->
     <string name="iniciar_sesion">Sign In</string>
@@ -35,5 +35,11 @@
     <string name="ingredients">Ingredients</string>
     <string name="instructions">Instructions</string>
     <string name="start">Start Cooking</string>
+
+    <!-- PerfilDialog -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="recipes_recently">Your recently viewed recipes</string>
+    <string name="modo_oscuro">Dark Theme</string>
+    <string name="log_out">Log Out</string>
 
 </resources>

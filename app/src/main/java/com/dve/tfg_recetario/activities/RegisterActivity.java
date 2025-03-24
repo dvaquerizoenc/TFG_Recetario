@@ -116,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                             usuario.put("correo", emailText);
                                                             usuario.put("nombre", usernameText);
                                                             usuario.put("fechaCreacion", fecha);
+                                                            usuario.put("imagenPerfil", "https://firebasestorage.googleapis.com/v0/b/tfg-recetario.firebasestorage.app/o/user_default.png?alt=media&token=06d7b771-0291-49f4-815b-cab5b784f432");
 
                                                             db.collection("usuarios").document(uid)
                                                                     .set(usuario)
