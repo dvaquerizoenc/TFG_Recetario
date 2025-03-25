@@ -50,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/epilogue_bold"
-            android:text="Pruebas1"
             android:textColor="@color/titulos"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/epilogue_regular"
-            android:text="Joined 2023 - May"
             android:textColor="@color/texto"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -162,7 +160,9 @@
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/darktheme_cb"
                 android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_height="28dp"
+                android:scaleX="1.1"
+                android:scaleY="1.1"
                 android:background="@color/transparente"
                 android:button="@drawable/ic_darktheme_selector" />
 
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="28dp"
             android:orientation="horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/darktheme_layout">

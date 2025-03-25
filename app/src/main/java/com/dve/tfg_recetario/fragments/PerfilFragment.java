@@ -202,7 +202,7 @@ public class PerfilFragment extends Fragment {
     private void changeImagePerfil() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        imagePickerLauncher.launch(Intent.createChooser(intent, "Selecciona una imagen"));
+        imagePickerLauncher.launch(Intent.createChooser(intent, "Select one picture"));
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
@@ -212,7 +212,7 @@ public class PerfilFragment extends Fragment {
         StorageReference storageRef = storage.getReference()
                 .child("usuarios/" + auth.getUid() + "/perfil.jpg");
 
-        // Subimos el archivo
+
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Obtenemos la URL pública de descarga
@@ -234,7 +234,7 @@ public class PerfilFragment extends Fragment {
                     });
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Error while uploading image", Toast.LENGTH_SHORT).show();
                 });
     }
 

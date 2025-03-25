@@ -36,6 +36,9 @@
     <string name="instructions">Instructions</string>
     <string name="start">Start Cooking</string>
 
+    <!-- HistorialActivty -->
+    <string name="historial_title">History</string>"
+
     <!-- PerfilDialog -->
     <string name="edit_profile">Edit Profile</string>
     <string name="recipes_recently">Your recently viewed recipes</string>
