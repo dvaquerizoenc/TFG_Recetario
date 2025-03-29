@@ -23,6 +23,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/btnFavoritosReceta"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/transparente"
+            android:button="@drawable/ic_favoritos_corazon_selector"
+            android:scaleX="1.25"
+            android:scaleY="1.25"
+            app:layout_constraintBottom_toTopOf="@+id/img_receta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/img_receta"
             android:layout_width="match_parent"

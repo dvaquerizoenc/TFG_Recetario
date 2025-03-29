@@ -1,5 +1,6 @@
 package com.dve.tfg_recetario.fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -19,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.dve.tfg_recetario.R;
+import com.dve.tfg_recetario.activities.HistorialActivity;
 import com.dve.tfg_recetario.adaptador.AdaptadorRecetasInicio;
 import com.dve.tfg_recetario.modelo.entidad.Categoria;
 import com.dve.tfg_recetario.modelo.entidad.ListaCategorias;
@@ -39,6 +42,7 @@ public class InicioFragment extends Fragment {
 
     private List<Categoria> listaCategorias;
     private SearchView searchView;
+    private ImageButton btnHistorial;
 
     private RecyclerView rvRecetasMain;
     private AdaptadorRecetasInicio adaptadorRecetasInicio;
@@ -80,6 +84,7 @@ public class InicioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         searchView = view.findViewById(R.id.search_view);
         listaCategorias = ListaCategorias.getInstance().getListaCategorias();
+        btnHistorial = view.findViewById(R.id.btn_historial);
 
         rvRecetasMain = view.findViewById(R.id.rv_recetas_main);
 
@@ -106,7 +111,10 @@ public class InicioFragment extends Fragment {
             }
         }
 
-
+        btnHistorial.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), HistorialActivity.class);
+            startActivity(intent);
+        });
 
 
     }

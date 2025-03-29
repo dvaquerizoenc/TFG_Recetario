@@ -14,6 +14,9 @@ public interface RestRecetaApiService {
     @GET("search.php")
     Call<RecetaResponse> getRecetaByNombre(@Query("s") String nombre);
 
+    @GET("lookup.php")
+    Call<RecetaResponse> getRecetaById(@Query("i") String id);
+
     @GET("filter.php")
     Call<RecetaResponse> getRecetaByCategoria(@Query("c") String categoria);
 

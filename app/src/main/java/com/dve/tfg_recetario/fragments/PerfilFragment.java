@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
+import com.dve.tfg_recetario.activities.HistorialActivity;
 import com.dve.tfg_recetario.activities.LoginActivity;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
@@ -47,6 +48,7 @@ public class PerfilFragment extends Fragment {
     private FirebaseFirestore db;
     private LinearLayout editarPerfil;
     private LinearLayout cerrarSesion;
+    private LinearLayout recentlyrecipes;
     private ImageView imagenPerfil;
     private TextView userName;
     private TextView fechJoin;
@@ -97,6 +99,7 @@ public class PerfilFragment extends Fragment {
         userName = view.findViewById(R.id.username_perfil);
         fechJoin = view.findViewById(R.id.fech_join_perfil);
         cbDarkTheme = view.findViewById(R.id.darktheme_cb);
+        recentlyrecipes = view.findViewById(R.id.recentlyrecipes_layout);
 
         prefs = requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
 
@@ -146,6 +149,11 @@ public class PerfilFragment extends Fragment {
 
         imagenPerfil.setOnClickListener(v -> {
             changeImagePerfil();
+        });
+
+        recentlyrecipes.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), HistorialActivity.class);
+            startActivity(intent);
         });
 
         cerrarSesion.setOnClickListener(v -> {
@@ -208,28 +216,26 @@ public class PerfilFragment extends Fragment {
     private void uploadImageToFirebase(Uri imageUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        // Ruta en Storage: usuarios/{UID}/perfil.jpg
         StorageReference storageRef = storage.getReference()
                 .child("usuarios/" + auth.getUid() + "/perfil.jpg");
 
 
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    // Obtenemos la URL pública de descarga
                     storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         String downloadUrl = uri.toString();
 
-                        // Guardamos la URL en Firestore
                         db.collection("usuarios").document(auth.getUid())
                                 .update("imagenPerfil", downloadUrl)
                                 .addOnSuccessListener(aVoid -> {
-                                    // Actualizamos el singleton (Usuario)
                                     user.setImagenPerfil(downloadUrl);
 
-                                    // Mostramos la imagen actualizada con Glide
                                     Glide.with(requireContext()).load(downloadUrl).into(imagenPerfil);
 
-                                    Toast.makeText(getContext(), "Imagen de perfil actualizada", Toast.LENGTH_SHORT).show();
+                                    if (getContext() != null) {
+                                        Toast.makeText(getContext(), "Imagen de perfil actualizada", Toast.LENGTH_SHORT).show();
+                                    }
+
                                 });
                     });
                 })

@@ -62,9 +62,27 @@ public class GestorReceta {
         call.enqueue(new Callback<RecetaResponse>() {
             @Override
             public void onResponse(Call<RecetaResponse> call, Response<RecetaResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().getRecetas().isEmpty()) {
                     Receta receta = response.body().getRecetas().get(0);
 
+                    callback.onTaskCompleted(receta);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RecetaResponse> call, Throwable t) {
+                Log.e("API_RESPONSE", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    public void getRecetaById(String id, ApiCallback callback) {
+        Call<RecetaResponse> call = restRecetaApiService.getRecetaById(id);
+        call.enqueue(new Callback<RecetaResponse>() {
+            @Override
+            public void onResponse(Call<RecetaResponse> call, Response<RecetaResponse> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().getRecetas().isEmpty()) {
+                    Receta receta = response.body().getRecetas().get(0);
                     callback.onTaskCompleted(receta);
                 }
             }

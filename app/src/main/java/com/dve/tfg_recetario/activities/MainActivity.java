@@ -39,6 +39,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView = null;
@@ -204,6 +208,10 @@ public class MainActivity extends AppCompatActivity {
                     user.setFechaCreacion(task.getResult().getString("fechaCreacion"));
                     user.setEmail(task.getResult().getString("email"));
                     user.setTema(Integer.parseInt(String.valueOf(task.getResult().getLong("tema"))));
+                    user.setFavoritos(ArrayList.class.cast(task.getResult().get("favoritos")));
+                    List<String> historial = ArrayList.class.cast(task.getResult().get("recientes"));
+                    Collections.reverse(historial);
+                    user.setRecientes((ArrayList<String>) historial);
 
                     if (user.getTema() == 32) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -211,5 +219,11 @@ public class MainActivity extends AppCompatActivity {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     }
                 });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.collection("usuarios").document(currentUser.getUid()).update("recientes", Usuario.getInstance().getRecientes());
     }
 }

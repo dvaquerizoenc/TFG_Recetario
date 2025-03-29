@@ -24,9 +24,13 @@ import com.dve.tfg_recetario.adaptador.AdaptadorIngredientesReceta;
 import com.dve.tfg_recetario.fragments.InicioFragment;
 import com.dve.tfg_recetario.modelo.entidad.Ingrediente;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
+import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +39,8 @@ import java.util.List;
 public class RecetaActivity extends AppCompatActivity {
 
     AlertDialog progressDialog = null;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,13 @@ public class RecetaActivity extends AppCompatActivity {
         TextView tvInstrucciones = findViewById(R.id.tvInstrucciones);
 
         btnAtras.setOnClickListener(view -> finish());
+
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        ArrayList<String> recientes = Usuario.getInstance().getRecientes();
+        recientes.add(String.valueOf(receta.getId()));
+        Usuario.getInstance().setRecientes(recientes);
+        db.collection("usuarios").document(auth.getUid()).update("recientes", recientes);
 
         Glide.with(imagen.getContext())
                 .load(receta.getImagen())

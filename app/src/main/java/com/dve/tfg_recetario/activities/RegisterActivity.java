@@ -25,12 +25,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.recaptcha.RecaptchaException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,8 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         btnSignUp.setOnClickListener(view -> {
-            String usernameText = username.getText().toString();
-            String emailText = email.getText().toString();
+            String usernameText = username.getText().toString().trim();
+            String emailText = email.getText().toString().trim();
             String passwordText = password.getText().toString();
             String confirmPasswordText = confirmPassword.getText().toString();
 
@@ -89,14 +91,20 @@ public class RegisterActivity extends AppCompatActivity {
                     if (emailText.contains("@")){
                         if (passwordText.equals(confirmPasswordText)) {
                             if (isPasswordValid(passwordText).equals("OK")) {
-                                loadDialog();
                                 auth.createUserWithEmailAndPassword(emailText, passwordText)
                                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
                                                 if (!task.isSuccessful()) {
-                                                    Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                                    Exception e = task.getException();
+                                                    if (e != null && e.getMessage() != null && e.getMessage().contains("email address is already in use")) {
+                                                        Toast.makeText(RegisterActivity.this, "There is already an account with this email address.", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(RegisterActivity.this, "Authentication failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        Log.e("AUTH_ERROR", "Error: ", e);
+                                                    }
                                                 } else {
+                                                    loadDialog();
                                                     FirebaseUser userFb = auth.getCurrentUser();
                                                     if(userFb!=null){
                                                         String uid = userFb.getUid();
@@ -113,6 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                                                             usuario.put("fechaCreacion", fecha);
                                                             usuario.put("imagenPerfil", "https://firebasestorage.googleapis.com/v0/b/tfg-recetario.firebasestorage.app/o/user_default.png?alt=media&token=06d7b771-0291-49f4-815b-cab5b784f432");
                                                             usuario.put("tema", getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK);
+                                                            usuario.put("recientes", Collections.emptyList());
+                                                            usuario.put("favoritos", Collections.emptyList());
+
 
                                                             db.collection("usuarios").document(uid)
                                                                     .set(usuario)
