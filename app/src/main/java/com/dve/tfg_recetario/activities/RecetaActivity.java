@@ -64,7 +64,18 @@ public class RecetaActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         ArrayList<String> recientes = Usuario.getInstance().getRecientes();
-        recientes.add(String.valueOf(receta.getId()));
+        boolean yaExiste = false;
+        for (String id : recientes) {
+            if (id.equals(String.valueOf(receta.getId()))) {
+                yaExiste = true;
+            }
+        }
+        if (!yaExiste) {
+            recientes.add(String.valueOf(receta.getId()));
+        } else {
+            recientes.remove(String.valueOf(receta.getId()));
+            recientes.add(String.valueOf(receta.getId()));
+        }
         Usuario.getInstance().setRecientes(recientes);
         db.collection("usuarios").document(auth.getUid()).update("recientes", recientes);
 
