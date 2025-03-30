@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TasteUp</string>
 
+    <!-- Generico -->
+    <string name="mi_recetario">My recipe book</string>
+
     <!-- Login -->
     <string name="iniciar_sesion">Sign In</string>
     <string name="crear_cuenta">Create Account</string>
@@ -27,6 +30,9 @@
     <string name="recipes">Recipes</string>
     <string name="search_hint">Search for recipes...</string>
     <string name="random_recipes">10 Random recipes</string>
+
+    <!-- FavoritosFragment -->
+    <string name="title_favorites">My favorite recipes</string>
 
     <!-- Progress Dialog -->
     <string name="progress_dialog">Loading recipes</string>

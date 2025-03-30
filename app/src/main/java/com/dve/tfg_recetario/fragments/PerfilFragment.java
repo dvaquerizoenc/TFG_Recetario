@@ -60,16 +60,7 @@ public class PerfilFragment extends Fragment {
     private SharedPreferences prefs;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
-    public PerfilFragment() {
-        // Required empty public constructor
-    }
-
-    public static PerfilFragment newInstance() {
-        PerfilFragment fragment = new PerfilFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public PerfilFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -59,13 +59,6 @@ public class InicioFragment extends Fragment {
         this.progressDialog = progressDialog;
     }
 
-    public static InicioFragment newInstance() {
-        InicioFragment fragment = new InicioFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

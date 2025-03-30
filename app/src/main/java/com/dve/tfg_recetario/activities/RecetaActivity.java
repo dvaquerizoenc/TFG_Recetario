@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,9 +41,10 @@ import java.util.List;
 
 public class RecetaActivity extends AppCompatActivity {
 
-    AlertDialog progressDialog = null;
-    FirebaseFirestore db;
-    FirebaseAuth auth;
+    private AlertDialog progressDialog = null;
+    private FirebaseFirestore db;
+    private FirebaseAuth auth;
+    private AppCompatCheckBox cbFavoritos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class RecetaActivity extends AppCompatActivity {
 
         loadDialog(2000);
 
+        cbFavoritos = findViewById(R.id.cbFavoritos);
         Receta receta = (Receta) getIntent().getSerializableExtra(InicioFragment.OBJ_RECETA);
         ImageButton btnAtras = findViewById(R.id.btn_atras);
         ImageView imagen = findViewById(R.id.img_receta);
@@ -60,6 +65,14 @@ public class RecetaActivity extends AppCompatActivity {
         TextView tvInstrucciones = findViewById(R.id.tvInstrucciones);
 
         btnAtras.setOnClickListener(view -> finish());
+
+        List<String> favoritos = Usuario.getInstance().getFavoritos();
+        for (String id : favoritos) {
+            if (id.equals(String.valueOf(receta.getId()))) {
+                cbFavoritos.setChecked(true);
+            }
+        }
+
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
@@ -131,6 +144,18 @@ public class RecetaActivity extends AppCompatActivity {
 
         Spanned textoFormateado = Html.fromHtml(instrucciones, Html.FROM_HTML_MODE_LEGACY);
         tvInstrucciones.setText(textoFormateado);
+
+        cbFavoritos.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            if(isChecked) {
+                favoritos.add(String.valueOf(receta.getId()));
+                db.collection("usuarios").document(auth.getUid()).update("favoritos", favoritos);
+            } else {
+                favoritos.remove(String.valueOf(receta.getId()));
+                db.collection("usuarios").document(auth.getUid()).update("favoritos", favoritos);
+            }
+        });
+
     }
 
     public void loadDialog(int duracion) {
