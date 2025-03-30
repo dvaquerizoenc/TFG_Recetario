@@ -59,24 +59,34 @@ public class HistorialActivity extends AppCompatActivity {
     public void cargarRecetasRecientes(FirebaseFirestore db, FirebaseUser currentUser) {
         db.collection("usuarios").document(currentUser.getUid())
                 .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("HistorialActivity", "Error al escuchar cambios", error);
+                        return;
+                    }
 
-                    List<String> recientes = Usuario.getInstance().getRecientes();
-                    if (recientes == null || recientes.isEmpty()) return;
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Usuario usuario = Usuario.getInstance();
+                        // Actualiza la lista de recientes del objeto Usuario
+                        List<String> recientesFirestore = (List<String>) documentSnapshot.get("recientes");
 
-                    // Invertimos la lista de IDs antes de cargar las recetas
-                    List<String> recientesInvertido = new ArrayList<>(recientes);
-                    Collections.reverse(recientesInvertido);
+                        if (recientesFirestore == null || recientesFirestore.isEmpty()) return;
 
-                    List<Receta> listaRecetasRecientes = new ArrayList<>();
-                    adaptadorHistorialRecetas = new AdaptadorHistorialRecetas(listaRecetasRecientes);
-                    rvRecetasHistorial.setAdapter(adaptadorHistorialRecetas);
+                        usuario.setRecientes((ArrayList<String>) recientesFirestore); // <- Actualiza el objeto Usuario
 
-                    GestorReceta gestorReceta = GestorReceta.getInstance();
+                        // Invertir y cargar recetas
+                        List<String> recientesInvertido = new ArrayList<>(recientesFirestore);
+                        Collections.reverse(recientesInvertido);
 
-                    // Cargar en orden invertido
-                    cargarRecetasSecuencialmente(recientesInvertido, 0, listaRecetasRecientes, adaptadorHistorialRecetas, gestorReceta);
+                        List<Receta> listaRecetasRecientes = new ArrayList<>();
+                        adaptadorHistorialRecetas = new AdaptadorHistorialRecetas(listaRecetasRecientes);
+                        rvRecetasHistorial.setAdapter(adaptadorHistorialRecetas);
+
+                        GestorReceta gestorReceta = GestorReceta.getInstance();
+                        cargarRecetasSecuencialmente(recientesInvertido, 0, listaRecetasRecientes, adaptadorHistorialRecetas, gestorReceta);
+                    }
                 });
     }
+
 
 
 
