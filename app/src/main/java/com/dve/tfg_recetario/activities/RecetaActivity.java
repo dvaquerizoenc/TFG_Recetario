@@ -73,7 +73,6 @@ public class RecetaActivity extends AppCompatActivity {
             }
         }
 
-
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         ArrayList<String> recientes = Usuario.getInstance().getRecientes();

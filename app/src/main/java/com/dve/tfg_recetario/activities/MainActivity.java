@@ -28,6 +28,7 @@ import com.dve.tfg_recetario.fragments.InicioFragment;
 import com.dve.tfg_recetario.fragments.MisRecetasFragment;
 import com.dve.tfg_recetario.fragments.PerfilFragment;
 import com.dve.tfg_recetario.modelo.entidad.ListaCategorias;
+import com.dve.tfg_recetario.modelo.entidad.ListaRecetasFavoritas;
 import com.dve.tfg_recetario.modelo.entidad.ListaRecetasRandom;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
@@ -85,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
             ListaCategorias.getInstance().inicializar();
         }
         iniciarGestores();
+
+        ListaRecetasFavoritas.getInstance().inicializar();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_view);

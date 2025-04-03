@@ -3,13 +3,13 @@ package com.dve.tfg_recetario.modelo.entidad;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaRecetasRandom {
-    private static ListaRecetasRandom instance;
+public class ListaRecetasFavoritas {
+    private static ListaRecetasFavoritas instance;
     private List<Receta> listaRecetas;
 
-    public static ListaRecetasRandom getInstance(){
+    public static ListaRecetasFavoritas getInstance(){
         if(instance == null) {
-            instance = new ListaRecetasRandom();
+            instance = new ListaRecetasFavoritas();
         }
         return instance;
     }
@@ -22,11 +22,11 @@ public class ListaRecetasRandom {
         return listaRecetas;
     }
 
-    public void setListaRandom(List<Receta> newLista) {
+    public void setListaFavoritas(List<Receta> newLista) {
         this.listaRecetas = new ArrayList<>(newLista);
     }
 
-    public void addListaRandom(Receta categoria) {
+    public void addListaFavoritas(Receta categoria) {
         this.listaRecetas.add(categoria);
     }
 }

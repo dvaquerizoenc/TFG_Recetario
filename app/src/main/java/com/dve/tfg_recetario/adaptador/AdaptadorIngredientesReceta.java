@@ -48,11 +48,6 @@ public class AdaptadorIngredientesReceta extends RecyclerView.Adapter<AdaptadorI
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-
-        holder.itemView.setLayoutParams(layoutParams);
-
-
         Glide.with(holder.imagen.getContext())
                 .load(listaRecetas.get(position).getImg())
                 .into(holder.imagen);
