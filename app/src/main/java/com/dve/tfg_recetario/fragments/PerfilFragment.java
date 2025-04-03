@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.activities.HistorialActivity;
 import com.dve.tfg_recetario.activities.LoginActivity;
+import com.dve.tfg_recetario.activities.MainActivity;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,9 +78,6 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_username, null);
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -130,10 +128,15 @@ public class PerfilFragment extends Fragment {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri imageUri = result.getData().getData();
 
-                        // Cargar la imagen en el ImageView
-                        Glide.with(requireContext()).load(imageUri).into(imagenPerfil);
+                        Log.d("IMG", ""+imageUri);
 
-                        uploadImageToFirebase(imageUri);
+                        if (isAdded()) {
+                            user.setImagenPerfil(String.valueOf(imageUri));
+                            Glide.with(requireContext()).load(imageUri).into(imagenPerfil);
+                            uploadImageToFirebase(imageUri);
+                        }
+
+
                     }
                 }
         );
@@ -205,34 +208,43 @@ public class PerfilFragment extends Fragment {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        new Thread(() -> {
+            try {
+                FirebaseStorage storage = FirebaseStorage.getInstance();
 
-        StorageReference storageRef = storage.getReference()
-                .child("usuarios/" + auth.getUid() + "/perfil.jpg");
+                StorageReference storageRef = storage.getReference()
+                        .child("usuarios/" + auth.getUid() + "/perfil.jpg");
 
 
-        storageRef.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String downloadUrl = uri.toString();
+                storageRef.putFile(imageUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String downloadUrl = uri.toString();
 
-                        db.collection("usuarios").document(auth.getUid())
-                                .update("imagenPerfil", downloadUrl)
-                                .addOnSuccessListener(aVoid -> {
-                                    user.setImagenPerfil(downloadUrl);
+                                db.collection("usuarios").document(auth.getUid())
+                                        .update("imagenPerfil", downloadUrl)
+                                        .addOnSuccessListener(aVoid -> {
 
-                                    Glide.with(requireContext()).load(downloadUrl).into(imagenPerfil);
+                                            if(isAdded()){
+                                                Glide.with(requireContext()).load(downloadUrl).into(imagenPerfil);
+                                            }
 
-                                    if (getContext() != null) {
-                                        Toast.makeText(getContext(), "Imagen de perfil actualizada", Toast.LENGTH_SHORT).show();
-                                    }
+                                            if (getContext() != null) {
+                                                Toast.makeText(requireActivity(), "Profile image updated successfully", Toast.LENGTH_SHORT).show();
+                                            }
 
-                                });
-                    });
-                })
-                .addOnFailureListener(e -> {
+                                        });
+                            });
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(getContext(), "Error while uploading image", Toast.LENGTH_SHORT).show();
+                        });
+            } catch (Exception e) {
+                requireActivity().runOnUiThread(() -> {
                     Toast.makeText(getContext(), "Error while uploading image", Toast.LENGTH_SHORT).show();
                 });
+            }
+        }).start();
     }
 
 }
