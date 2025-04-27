@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,7 +160,7 @@ public class FavoritosFragment extends Fragment {
 
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress, null);
+        View dialogView = inflater.inflate(R.layout.dialog_carga, null);
 
         Context context = getContext();
         if (context == null) return;
@@ -171,7 +172,7 @@ public class FavoritosFragment extends Fragment {
 
         LoadDialog.getInstance().inicializar(progressDialog);
 
-        TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
+        //TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
 
         if (progressDialog.getWindow() != null) {
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -179,7 +180,7 @@ public class FavoritosFragment extends Fragment {
 
         progressDialog.show();
 
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             int dotCount = 0;
             @Override
@@ -193,12 +194,14 @@ public class FavoritosFragment extends Fragment {
             }
         };
 
-        handler.post(runnable);
+        handler.post(runnable);*/
     }
 
     private void cerrarDialogoCarga() {
         if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                progressDialog.dismiss();
+            }, 400);
         }
     }
 }

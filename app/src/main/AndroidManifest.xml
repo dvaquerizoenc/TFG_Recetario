@@ -15,6 +15,9 @@
         android:theme="@style/Theme.TFG_Recetario"
         tools:targetApi="31">
         <activity
+            android:name=".activities.MiRecetaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.HistorialActivity"
             android:exported="false" />
         <activity

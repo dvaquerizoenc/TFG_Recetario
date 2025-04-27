@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -94,7 +95,7 @@ public class PerfilFragment extends Fragment {
 
         user = Usuario.getInstance();
 
-        Glide.with(imagenPerfil.getContext()).load(user.getImagenPerfil()).into(imagenPerfil);
+        Glide.with(imagenPerfil.getContext()).load(user.getImagenPerfil()).placeholder(R.drawable.user_default).into(imagenPerfil);
         userName.setText(user.getNombre());
         fechJoin.setText(user.getFechaCreacion());
 
@@ -132,7 +133,7 @@ public class PerfilFragment extends Fragment {
 
                         if (isAdded()) {
                             user.setImagenPerfil(String.valueOf(imageUri));
-                            Glide.with(requireContext()).load(imageUri).into(imagenPerfil);
+                            Glide.with(requireContext()).load(imageUri).placeholder(R.drawable.user_default).into(imagenPerfil);
                             uploadImageToFirebase(imageUri);
                         }
 
@@ -208,6 +209,8 @@ public class PerfilFragment extends Fragment {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
+        Context appContext = getContext() != null ? getContext().getApplicationContext() : null;
+
         new Thread(() -> {
             try {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -225,14 +228,9 @@ public class PerfilFragment extends Fragment {
                                         .update("imagenPerfil", downloadUrl)
                                         .addOnSuccessListener(aVoid -> {
 
-                                            if(isAdded()){
-                                                Glide.with(requireContext()).load(downloadUrl).into(imagenPerfil);
-                                            }
-
-                                            if (getContext() != null) {
-                                                Toast.makeText(requireActivity(), "Profile image updated successfully", Toast.LENGTH_SHORT).show();
-                                            }
-
+                                            new Handler(Looper.getMainLooper()).post(() -> {
+                                                Toast.makeText(appContext, "Profile image updated successfully", Toast.LENGTH_SHORT).show();
+                                            });
                                         });
                             });
                         })

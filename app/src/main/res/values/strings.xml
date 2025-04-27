@@ -42,6 +42,9 @@
     <string name="instructions">Instructions</string>
     <string name="start">Start Cooking</string>
 
+    <!-- MiRecetaActivity -->
+    <string name="title_mi_receta">Title</string>
+
     <!-- HistorialActivty -->
     <string name="historial_title">History</string>"
 
