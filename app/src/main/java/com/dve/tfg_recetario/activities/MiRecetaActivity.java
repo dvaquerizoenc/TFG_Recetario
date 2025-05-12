@@ -45,7 +45,8 @@ public class MiRecetaActivity extends AppCompatActivity {
 
         List<String> listaEtiquetas = new ArrayList<>();
 
-        listaEtiquetas.add("+");
+        listaEtiquetas.add("Add...");
+        listaEtiquetas.add("Adddawd");
 
         rvEtiquetas.setAdapter(new AdaptadorEtiquetasReceta(listaEtiquetas));
 
@@ -57,7 +58,7 @@ public class MiRecetaActivity extends AppCompatActivity {
 
         Ingrediente ingrediente = new Ingrediente();
         ingrediente.setImg("");
-        ingrediente.setIngrediente("Add ingredient");
+        ingrediente.setIngrediente("Add ingredient...");
         ingrediente.setCantidad("");
         listaIngredientes.add(ingrediente);
 

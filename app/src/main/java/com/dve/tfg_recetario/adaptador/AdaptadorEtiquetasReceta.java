@@ -2,6 +2,7 @@ package com.dve.tfg_recetario.adaptador;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class AdaptadorEtiquetasReceta extends RecyclerView.Adapter<AdaptadorEtiq
 
         holder.etiqueta.setText(txt);
 
+        Log.d("Hola", holder.etiqueta.getText()+" : "+position);
 
     }
 
