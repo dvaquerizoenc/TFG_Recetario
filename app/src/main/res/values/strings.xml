@@ -28,7 +28,7 @@
 
     <!-- InicioFragment -->
     <string name="recipes">Recipes</string>
-    <string name="search_hint">Search for recipes...</string>
+    <string name="search_hint">Search for recipes…</string>
     <string name="random_recipes">10 Random recipes</string>
 
     <!-- FavoritosFragment -->
@@ -41,9 +41,50 @@
     <string name="ingredients">Ingredients</string>
     <string name="instructions">Instructions</string>
     <string name="start">Start Cooking</string>
+    <string name="add_to_calendar">Add to calendar</string>
+    <string name="delete_recipe">Sure you want to delete the following recipe?</string>
+    <string name="confirm_btn">Confirm</string>
 
     <!-- MiRecetaActivity -->
-    <string name="title_mi_receta">Title</string>
+    <string name="edit_recipe">Edit recipe</string>
+    <string name="save_recipe">Save</string>
+    <string name="title">Title</string>
+    <string name="title_mi_receta">Insert title…</string>
+    <string name="tags_title">Tags</string>
+    <string name="time_text">Time</string>
+    <string name="calories_text">Calories</string>
+    <string name="insert_time">Insert time…</string>
+    <string name="insert_calories">Insert calories…</string>
+    <string name="add_tag">E.g: Dinner</string>
+    <string name="add_ingredient">E.g: Eggs</string>
+    <string name="add_ingredient_amount">E.g: 3</string>
+    <string name="add_step">E.g: Beat 3 eggs</string>
+    <string name="recipe_succesfull_upload">Recipe uploaded successfully</string>
+    <string name="recipe_image_empty">The recipe image cannot be empty</string>
+    <string name="recipe_name_empty">The recipe name cannot be empty</string>
+    <string name="recipe_tags_minimum">There must be at least one tag</string>
+    <string name="recipe_ingredients_minimum">There must be at least one ingredient</string>
+    <string name="recipe_steps_minimum">There must be at least one step in the instructions</string>
+    <string name="recipe_creation_error">An error occurred while creating the recipe, please try again</string>
+
+
+    <!-- DialogsMiRecetaActivity -->
+    <string name="txt_new_tag">Write the new tag</string>
+    <string name="hint_new_tag">New tag</string>
+    <string name="txt_new_step">Write the new step</string>
+    <string name="hint_new_step">New Step</string>
+    <string name="btn_new_info">Add</string>
+    <string name="txt_new_ingredient">Create new ingredient</string>
+    <string name="hint_new_ingredient_name">Ingredient name</string>
+    <string name="hint_new_ingredient_amount">Enter amount</string>
+
+    <string name="d_tag_delete">Confirm tag deletion?</string>
+    <string name="d_ingredients_delete">Confirm ingredient deletion?</string>
+    <string name="d_step_delete">Confirm step deletion?</string>
+    <string name="btn_delete_item">Delete</string>
+    <string name="ningun_campo_vacio">No field can be left empty</string>
+    <string name="no_text_vacio">The text field cannot be empty</string>
+    <string name="select_picture">Select one picture</string>
 
     <!-- HistorialActivty -->
     <string name="historial_title">History</string>"

@@ -23,6 +23,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/btn_eliminar_receta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/transparente"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_trash"
+            app:layout_constraintEnd_toStartOf="@+id/cbFavoritos"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/cbFavoritos"
             android:layout_width="24dp"
@@ -61,59 +75,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_receta" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTituloReceta">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time: "
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30mins"
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=", "
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calories: "
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvKcalReceta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="600 kcal"
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvEtiquetasReceta"
@@ -123,14 +84,14 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloReceta" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/epilogue_bold"
             android:text="@string/ingredients"
             android:textColor="@color/titulos"
@@ -156,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/epilogue_bold"
             android:text="@string/instructions"
             android:textColor="@color/titulos"
@@ -183,7 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="16dp"
+            android:layout_marginVertical="32dp"
             android:backgroundTint="@color/generico"
             android:fontFamily="@font/epilogue_bold"
             android:paddingVertical="12dp"
@@ -191,10 +152,27 @@
             android:textColor="@color/textBtn"
             android:textSize="18sp"
             app:cornerRadius="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvInstrucciones" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddRecipeToCalendar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.5"
+            android:layout_marginVertical="16dp"
+            android:backgroundTint="@color/texto"
+            android:fontFamily="@font/epilogue_bold"
+            android:paddingVertical="12dp"
+            android:text="@string/add_to_calendar"
+            android:textColor="@color/textBtn"
+            android:textSize="12sp"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnStartCoocking" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

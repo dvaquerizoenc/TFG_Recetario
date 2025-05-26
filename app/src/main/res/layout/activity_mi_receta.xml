@@ -23,8 +23,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/epilogue_bold"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="@string/edit_recipe"
+            android:textColor="@color/titulos"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/img_receta_mi"
+            app:layout_constraintStart_toEndOf="@+id/btn_atras_mi"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_save_mi_receta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/epilogue_bold"
+            android:backgroundTint="@color/transparente"
+            android:text="@string/save_recipe"
+            android:textColor="@color/titulos"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/img_receta_mi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
-            android:id="@+id/img_receta"
+            android:id="@+id/img_receta_mi"
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:layout_marginTop="8dp"
@@ -34,73 +61,73 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_atras_mi" />
 
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/epilogue_bold"
+            android:text="@string/title"
+            android:textColor="@color/titulos"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="12dp"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_receta_mi" />
+
         <EditText
             android:id="@+id/tituloReceta"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/title_mi_receta"
-            android:textColorHint="@color/titulos"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:textSize="20sp"
-            android:paddingHorizontal="0dp"
+            android:background="@drawable/bg_et_my_recipe"
+            android:fontFamily="@font/epilogue_regular"
+            android:hint="@string/title_mi_receta"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLength="60"
+            android:maxLines="4"
+            android:layout_marginTop="4dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
             android:textColor="@color/titulos"
-            android:fontFamily="@font/epilogue_bold"
+            android:textColorHint="@color/hintText"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_receta" />
+            app:layout_constraintTop_toBottomOf="@+id/titleTv" />
+
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayoutTags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
             android:orientation="horizontal"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tituloReceta">
 
             <TextView
+                android:id="@+id/tvTags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time: "
-                android:fontFamily="@font/epilogue_regular"
+                android:fontFamily="@font/epilogue_bold"
+                android:text="@string/tags_title"
                 android:textColor="@color/titulos"
-                android:textSize="14sp" />
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30mins"
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=", "
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calories: "
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvKcalReceta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="600 kcal"
-                android:fontFamily="@font/epilogue_regular"
-                android:textColor="@color/titulos"
-                android:textSize="14sp" />
-
+            <ImageButton
+                android:id="@+id/btn_add_tag"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add_info"
+                android:background="@drawable/bg_add_tags_ingredients_instructions"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:layout_constraintStart_toEndOf="@+id/tvTags"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         </LinearLayout>
 
@@ -108,65 +135,105 @@
             android:id="@+id/rvEtiquetasRecetaMi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="12dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTags" />
 
-        <TextView
-            android:id="@+id/textView2"
+        <LinearLayout
+            android:id="@+id/linearLayoutIngredients"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/epilogue_bold"
-            android:text="@string/ingredients"
-            android:textColor="@color/titulos"
-            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvEtiquetasRecetaMi" />
+            app:layout_constraintTop_toBottomOf="@+id/rvEtiquetasRecetaMi" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/epilogue_bold"
+                android:text="@string/ingredients"
+                android:textColor="@color/titulos"
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageButton
+                android:id="@+id/btn_add_ingredient"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add_info"
+                android:background="@drawable/bg_add_tags_ingredients_instructions"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:layout_constraintStart_toEndOf="@+id/tvTags"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvIngredientesRecetaMi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginHorizontal="12dp"
             android:layout_marginTop="16dp"
             android:nestedScrollingEnabled="false"
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutIngredients" />
 
-        <TextView
-            android:id="@+id/textView3"
+        <LinearLayout
+            android:id="@+id/linearLayoutSteps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/epilogue_bold"
-            android:text="@string/instructions"
-            android:textColor="@color/titulos"
-            android:textSize="20sp"
+            android:layout_marginTop="24dp"
+            android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvIngredientesRecetaMi" />
+            app:layout_constraintTop_toBottomOf="@id/rvIngredientesRecetaMi" >
 
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/epilogue_bold"
+                android:text="@string/instructions"
+                android:textColor="@color/titulos"
+                android:textSize="20sp"
+                android:layout_marginEnd="8dp"/>
 
-        <EditText
-            android:id="@+id/tvInstrucciones"
+            <ImageButton
+                android:id="@+id/btn_add_step"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_add_info"
+                android:background="@drawable/bg_add_tags_ingredients_instructions"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:layout_constraintStart_toEndOf="@+id/tvTags"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvInstruccionesRecetaMi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="12dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/epilogue_regular"
-            android:paddingHorizontal="0dp"
-            android:textColor="@color/texto"
-            android:textSize="14sp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSteps" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

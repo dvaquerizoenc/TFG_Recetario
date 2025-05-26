@@ -42,14 +42,14 @@ public class AdaptadorRecetasInicio extends RecyclerView.Adapter<AdaptadorReceta
         ImageView imagen;
         TextView nombre;
         TextView categoria;
-        TextView tiempo;
+        TextView area;
 
         public ViewHolder(View v) {
             super(v);
             imagen = v.findViewById(R.id.img);
             nombre = v.findViewById(R.id.nombre);
             categoria = v.findViewById(R.id.categoria);
-            tiempo = v.findViewById(R.id.tiempo);
+            area = v.findViewById(R.id.area);
         }
     }
 
@@ -71,9 +71,7 @@ public class AdaptadorRecetasInicio extends RecyclerView.Adapter<AdaptadorReceta
 
         holder.nombre.setText(receta.getNombre());
         holder.categoria.setText(receta.getCategoria());
-        holder.tiempo.setText("30mins · 4 personas");
-
-        receta.cargarIngredientesYMedidas();
+        holder.area.setText("Area · "+receta.getArea());
 
         holder.itemView.setOnClickListener(view -> {
             try {

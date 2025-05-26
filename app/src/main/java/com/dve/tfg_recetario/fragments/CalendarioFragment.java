@@ -11,8 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dve.tfg_recetario.R;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.util.Locale;
 
 public class CalendarioFragment extends Fragment {
+
+    private MaterialCalendarView calendarView;
 
     public CalendarioFragment() {}
 
@@ -29,6 +34,8 @@ public class CalendarioFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        calendarView = view.findViewById(R.id.calendarView);
 
     }
 }

@@ -35,11 +35,8 @@ import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.activities.HistorialActivity;
 import com.dve.tfg_recetario.activities.LoginActivity;
-import com.dve.tfg_recetario.activities.MainActivity;
-import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -134,6 +131,7 @@ public class PerfilFragment extends Fragment {
                         if (isAdded()) {
                             user.setImagenPerfil(String.valueOf(imageUri));
                             Glide.with(requireContext()).load(imageUri).placeholder(R.drawable.user_default).into(imagenPerfil);
+                            Log.d("IMAGE", "0");
                             uploadImageToFirebase(imageUri);
                         }
 
@@ -161,15 +159,15 @@ public class PerfilFragment extends Fragment {
 
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_username, null);
+        View dialogView = inflater.inflate(R.layout.dialog_modular, null);
 
         cancelBtn = dialogView.findViewById(R.id.cancel_btn_perfil);
         saveBtn = dialogView.findViewById(R.id.save_btn_perfil);
-        newUsername = dialogView.findViewById(R.id.new_username_et);
+        newUsername = dialogView.findViewById(R.id.new_username_et_dialog);
 
         usernameDialog = new AlertDialog.Builder(getContext())
                 .setView(dialogView)
-                .setCancelable(true)
+                .setCancelable(false)
                 .create();
 
         if (usernameDialog.getWindow() != null) {
@@ -210,7 +208,7 @@ public class PerfilFragment extends Fragment {
 
     private void uploadImageToFirebase(Uri imageUri) {
         Context appContext = getContext() != null ? getContext().getApplicationContext() : null;
-
+        Log.d("IMAGE", "1");
         new Thread(() -> {
             try {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -218,7 +216,7 @@ public class PerfilFragment extends Fragment {
                 StorageReference storageRef = storage.getReference()
                         .child("usuarios/" + auth.getUid() + "/perfil.jpg");
 
-
+                Log.d("IMAGE", "2");
                 storageRef.putFile(imageUri)
                         .addOnSuccessListener(taskSnapshot -> {
                             storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -229,6 +227,7 @@ public class PerfilFragment extends Fragment {
                                         .addOnSuccessListener(aVoid -> {
 
                                             new Handler(Looper.getMainLooper()).post(() -> {
+                                                Log.d("IMAGE", "3");
                                                 Toast.makeText(appContext, "Profile image updated successfully", Toast.LENGTH_SHORT).show();
                                             });
                                         });

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="@color/iconFill">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/iconFill"
+        app:cardCornerRadius="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="24dp">
+
+            <TextView
+                android:id="@+id/titulo_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/epilogue_bold"
+                android:text="@string/new_username"
+                android:textColor="@color/titulos"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/new_username_et_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/edit_text_username"
+                android:fontFamily="@font/epilogue_regular"
+                android:hint="@string/new_username_edittext"
+                android:inputType="textCapSentences"
+                android:padding="12dp"
+                android:textColor="@color/texto"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/cancel_btn_perfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparente"
+                    android:fontFamily="@font/epilogue_bold"
+                    android:text="@string/cancel_btn"
+                    android:textColor="@color/titulos"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/titulos"
+                    app:strokeWidth="2dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/save_btn_perfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparente"
+                    android:fontFamily="@font/epilogue_bold"
+                    android:text="@string/save_btn"
+                    android:textColor="@color/titulos"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/titulos"
+                    app:strokeWidth="2dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,12 +2,17 @@ package com.dve.tfg_recetario.modelo.entidad;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -112,10 +117,30 @@ public class Receta implements Serializable {
     @SerializedName("strMeasure20")
     private String medida20;
 
-
     private List<String> ingredientes;
     private List<String> medidas;
+    private List<String> listaInstrucciones;
+    private List<Ingrediente> listaIngredientes;
+    private List<String> listaEtiquetas;
+    private Date fechaCreacion;
+    private boolean isManual;
+    private boolean isEditable;
+    private String idManual;
 
+    public Receta() {
+        this.idManual = UUID.randomUUID().toString();;
+        this.nombre = "";
+        this.imagen = "";
+        this.listaEtiquetas = new ArrayList<>();
+        this.listaIngredientes = new ArrayList<>();
+        this.listaInstrucciones = new ArrayList<>();
+        this.fechaCreacion = new Date();
+        setEditable(false);
+    }
+
+    public void addInstrucciones(String step) {
+        listaInstrucciones.add(step);
+    }
 
     public void cargarIngredientesYMedidas() {
         ingredientes = new ArrayList<>();
@@ -136,6 +161,69 @@ public class Receta implements Serializable {
                 Log.d("EXCEPTION", "Error al cargar ingredientes y medidas: " + e.getMessage());
             }
         }
+    }
+
+    public List<String> getIngredientes() {
+        ingredientes = new ArrayList<>();
+        boolean flag = false;
+        int cont = 1;
+
+        while(cont<=20 && !flag) {
+            try {
+                String ingrediente = (String) this.getClass().getDeclaredField("ingrediente" + cont).get(this);
+                if (ingrediente != null && !ingrediente.trim().isEmpty()) {
+                    ingredientes.add(ingrediente);
+                } else {
+                    flag = true;
+                }
+                cont++;
+            } catch (Exception e) {
+                Log.d("EXCEPTION", "Error al cargar ingredientes: " + e.getMessage());
+            }
+        }
+
+        return ingredientes;
+    }
+
+    public List<String> getMedidas() {
+        medidas = new ArrayList<>();
+        boolean flag = false;
+        int cont = 1;
+
+        while(cont<=20 && !flag) {
+            try {
+                String medida = (String) this.getClass().getDeclaredField("medida" + cont).get(this);
+                if (medida != null) {
+                    if (!medida.trim().isEmpty()) {
+                        medidas.add(medida);
+                    } else {
+                        String ingrediente = (String) this.getClass().getDeclaredField("ingrediente" + cont).get(this);
+                        if(!ingrediente.trim().isEmpty()) {
+                            medidas.add("");
+                        }
+                    }
+                } else {
+                    flag = true;
+                }
+                cont++;
+            } catch (Exception e) {
+                Log.d("EXCEPTION", "Error al cargar medidas: " + e.getMessage());
+            }
+        }
+
+        return medidas;
+    }
+
+    public Map<String, Object> toMapFirebase() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("idManual", idManual);
+        map.put("nombre", nombre);
+        map.put("imagen", imagen);
+        map.put("listaEtiquetas", listaEtiquetas);
+        map.put("listaIngredientes", listaIngredientes);
+        map.put("listaInstrucciones", listaInstrucciones);
+        map.put("fechaCreacion", fechaCreacion);
+        return map;
     }
 
 }

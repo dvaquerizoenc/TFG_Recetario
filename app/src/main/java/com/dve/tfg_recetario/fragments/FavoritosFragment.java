@@ -172,29 +172,11 @@ public class FavoritosFragment extends Fragment {
 
         LoadDialog.getInstance().inicializar(progressDialog);
 
-        //TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
-
         if (progressDialog.getWindow() != null) {
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
         progressDialog.show();
-
-        /*Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            int dotCount = 0;
-            @Override
-            public void run() {
-                if (isAdded()) {
-                    String dots = new String(new char[dotCount % 4]).replace("\0", ".");
-                    tvProgressText.setText(getString(R.string.progress_dialog) + dots);
-                    dotCount++;
-                    handler.postDelayed(this, 400); // Se repite cada 500ms
-                }
-            }
-        };
-
-        handler.post(runnable);*/
     }
 
     private void cerrarDialogoCarga() {

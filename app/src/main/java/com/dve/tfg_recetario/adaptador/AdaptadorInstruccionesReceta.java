@@ -1,32 +1,20 @@
 package com.dve.tfg_recetario.adaptador;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
-import android.text.InputFilter;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
-import com.dve.tfg_recetario.activities.MiRecetaActivity;
-import com.dve.tfg_recetario.activities.RecetaActivity;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
 
 import java.util.ArrayList;
@@ -34,105 +22,113 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class AdaptadorEtiquetasReceta extends RecyclerView.Adapter<AdaptadorEtiquetasReceta.ViewHolder> {
-    private List<String> listaEtiquetas;
+public class AdaptadorInstruccionesReceta extends RecyclerView.Adapter<AdaptadorInstruccionesReceta.ViewHolder> {
+    private List<String> listaInstrucciones;
     private Context context;
     private AlertDialog addInfoDialog;
     private boolean isManual = false;
-
     private Receta receta;
 
     private TextView titleDialog, newInfo;
 
     private Button cancelBtn, saveBtn;
 
-    public AdaptadorEtiquetasReceta(Context context, List<String> listaEtiquetas) {
+    public AdaptadorInstruccionesReceta(List<String> listaInstrucciones, Context context) {
+        this.listaInstrucciones = new ArrayList<>(listaInstrucciones);
         this.context = context;
-        this.listaEtiquetas = new ArrayList<>(listaEtiquetas);
-        Log.d("MI RECETA", " " + listaEtiquetas);
         verificarListaVacia();
     }
 
-    public AdaptadorEtiquetasReceta(Context context, List<String> listaEtiquetas, boolean isManual, Receta receta) {
+    public AdaptadorInstruccionesReceta(List<String> listaInstrucciones, Context context, boolean isManual, Receta receta) {
+        this.listaInstrucciones = new ArrayList<>(listaInstrucciones);
         this.context = context;
-        this.listaEtiquetas = new ArrayList<>(listaEtiquetas);
         this.isManual = isManual;
         this.receta = receta;
         verificarListaVacia();
     }
 
     public void addItem(String newTag){
-        if (listaEtiquetas.size() == 1) {
-            if(listaEtiquetas.get(0).startsWith("E.g:")) {
-                listaEtiquetas.clear();
+        if (listaInstrucciones.size() == 1) {
+            if(listaInstrucciones.get(0).startsWith("E.g:")) {
+                listaInstrucciones.clear();
             }
         }
-        listaEtiquetas.add(newTag);
-        receta.setListaEtiquetas(listaEtiquetas);
-        notifyDataSetChanged();
-    }
-
-    public void setListaEtiquetas(List<String> listaEtiquetas) {
-        this.listaEtiquetas = new ArrayList<>(listaEtiquetas);
-        notifyDataSetChanged();
-    }
-
-    public void refrescarLista() {
+        int numSteps = listaInstrucciones.size()+1;
+        String step = numSteps+". "+newTag;
+        listaInstrucciones.add(step);
+        receta.setListaInstrucciones(listaInstrucciones);
         notifyDataSetChanged();
     }
 
     public void deleteItem(String txt) {
         String texto = txt.replace("\"", "");
         int cont = 0;
-        while (cont < listaEtiquetas.size() && !Objects.equals(listaEtiquetas.get(cont), texto)) {
+        while (cont < listaInstrucciones.size() && !Objects.equals(listaInstrucciones.get(cont), texto)) {
             cont++;
         }
 
-        if (cont < listaEtiquetas.size()) {
-            Log.d("TRACE", "Eliminando: " + listaEtiquetas.get(cont));
-            listaEtiquetas.remove(cont);
+        if (cont < listaInstrucciones.size()) {
+            Log.d("TRACE", "Eliminando: " + listaInstrucciones.get(cont));
+            listaInstrucciones.remove(cont);
+            receta.setListaInstrucciones(this.listaInstrucciones);
+            renumerarInstrucciones();
             verificarListaVacia();
             notifyDataSetChanged();
         }
     }
 
+    private void renumerarInstrucciones() {
+        for (int i = 0; i < listaInstrucciones.size(); i++) {
+            String instruccion = listaInstrucciones.get(i);
+
+            String textoSinNumero = instruccion.replaceFirst("^\\d+\\.\\s*", "");
+
+            listaInstrucciones.set(i, (i + 1) + ". " + textoSinNumero);
+        }
+    }
+
+    private void verificarListaVacia() {
+        if (listaInstrucciones.isEmpty()) {
+            listaInstrucciones.add(context.getString(R.string.add_tag));
+            notifyItemInserted(0);}
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView etiqueta;
+        TextView instrucciones;
 
         public ViewHolder(View v) {
             super(v);
-            etiqueta = v.findViewById(R.id.tvEtiquetasReceta);
+            instrucciones = v.findViewById(R.id.tvInstrucciones);
         }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_etiquetas, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_instrucciones, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String txt = listaEtiquetas.get(position);
-
-        holder.etiqueta.setText(txt);
+        String txt = listaInstrucciones.get(position);
+        holder.instrucciones.setText(txt);
 
         if (isManual) {
-            holder.etiqueta.setOnLongClickListener(v -> {
+            holder.instrucciones.setOnLongClickListener(v -> {
 
                 loadDialog(context.getString(R.string.d_tag_delete), "\"" +txt+ "\"");
 
                 return true;
             });
         }
+
     }
 
     @Override
     public int getItemCount() {
-        return listaEtiquetas.size();
+        return listaInstrucciones.size();
     }
 
     public void loadDialog(String title, String hint) {
@@ -162,19 +158,14 @@ public class AdaptadorEtiquetasReceta extends RecyclerView.Adapter<AdaptadorEtiq
         });
 
         saveBtn.setOnClickListener(v -> {
-            Log.d("TRACE", String.valueOf(listaEtiquetas.size()));
+            Log.d("TRACE", String.valueOf(listaInstrucciones.size()));
             deleteItem(hint);
             Log.d("TRACE", hint+"hint");
-            Log.d("TRACE", String.valueOf(listaEtiquetas.size()));
+            Log.d("TRACE", String.valueOf(listaInstrucciones.size()));
             addInfoDialog.dismiss();
         });
 
         addInfoDialog.show();
     }
 
-    private void verificarListaVacia() {
-        if (listaEtiquetas.isEmpty()) {
-            listaEtiquetas.add(context.getString(R.string.add_tag));
-            notifyItemInserted(0);}
-    }
 }

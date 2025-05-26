@@ -29,6 +29,7 @@
     <color name="searchView">#E1DED5</color>
     <color name="etiquetas">#FAFAFA</color>
     <color name="textBtn">#181611</color>
+    <color name="hintText">#80181611</color>
 
     <!-- Colores iconos claro -->
     <color name="iconFill">#E0DED6</color>

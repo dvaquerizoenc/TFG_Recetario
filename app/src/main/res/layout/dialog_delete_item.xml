@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="@color/iconFill">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:windowBackground="@android:color/transparent"
+    android:background="@android:color/transparent">
 
     <androidx.cardview.widget.CardView
+        android:layout_marginHorizontal="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/iconFill"
         app:cardCornerRadius="36dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:cardElevation="8dp"
+        android:backgroundTint="@color/iconFill">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="24dp">
+            android:paddingVertical="24dp"
+            android:paddingHorizontal="24dp">
 
             <TextView
-                android:id="@+id/titulo_"
+                android:id="@+id/dialog_delete_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/epilogue_bold"
-                android:text="@string/new_username"
                 android:textColor="@color/titulos"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/new_username_et"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/dialog_delete_item"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/edit_text_username"
+                android:textColor="@color/titulos"
+                android:textSize="16sp"
                 android:fontFamily="@font/epilogue_regular"
-                android:hint="@string/new_username_edittext"
-                android:padding="12dp"
-                android:textColor="@color/texto"
-                android:textSize="16sp" />
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_delete_title" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_delete_item">
 
                 <Button
-                    android:id="@+id/cancel_btn_perfil"
+                    android:id="@+id/cancel_btn_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/transparente"
@@ -68,20 +75,21 @@
                     android:layout_weight="1" />
 
                 <Button
-                    android:id="@+id/save_btn_perfil"
+                    android:id="@+id/delete_btn_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/transparente"
                     android:fontFamily="@font/epilogue_bold"
-                    android:text="@string/save_btn"
+                    android:text="@string/btn_delete_item"
                     android:textColor="@color/titulos"
                     android:textSize="14sp"
                     app:strokeColor="@color/titulos"
                     app:strokeWidth="2dp" />
 
             </LinearLayout>
-        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

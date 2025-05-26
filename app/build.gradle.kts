@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.dve.tfg_recetario"
-        minSdk = 26
+        minSdk = 30
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -54,4 +54,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
+    implementation(libs.material.calendarview)
 }

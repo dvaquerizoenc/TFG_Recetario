@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo transparente con esquinas redondeadas abajo -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/secundario" />
+            <corners
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp"
+                android:bottomLeftRadius="16dp"
+                android:bottomRightRadius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Línea inferior simulada como borde -->
+    <item android:bottom="2dp" android:left="0dp" android:right="0dp" android:top="0dp">
+        <shape android:shape="rectangle">
+            <size android:height="2dp" />
+            <solid android:color="@color/primario" />
+        </shape>
+    </item>
+
+</layer-list>

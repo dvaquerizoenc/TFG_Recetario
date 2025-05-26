@@ -25,6 +25,7 @@
     <color name="searchView">#3F3B2C</color>
     <color name="etiquetas">#2D2A20</color>
     <color name="textBtn">#181611</color>
+    <color name="hintText">#80FAFAFA</color>
 
     <!-- Colores iconos oscuro -->
     <color name="iconFill">#2D2A20</color>

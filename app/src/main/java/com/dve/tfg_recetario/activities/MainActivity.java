@@ -33,6 +33,7 @@ import com.dve.tfg_recetario.modelo.entidad.ListaRecetasRandom;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.dve.tfg_recetario.modelo.negocio.GestorListaCategorias;
+import com.dve.tfg_recetario.modelo.negocio.GestorMiReceta;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
 import com.dve.tfg_recetario.modelo.servicio.ApiCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -43,6 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
     private String lastFragment;
     private SharedPreferences prefs;
     private Integer tema;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+
+        Configuration config = newBase.getResources().getConfiguration();
+        config.setLocale(locale);
+
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
