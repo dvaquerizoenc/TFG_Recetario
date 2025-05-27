@@ -89,6 +89,7 @@ public class AdaptadorRecetasCalendario extends RecyclerView.Adapter<AdaptadorRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Receta receta = listaRecetas.get(position);
+        Log.d("MI RECETA", String.valueOf(receta.getListaEtiquetas()));
 
         Glide.with(holder.imgReceta.getContext())
                 .load(receta.getImagen())
@@ -118,6 +119,7 @@ public class AdaptadorRecetasCalendario extends RecyclerView.Adapter<AdaptadorRe
         holder.itemView.setOnClickListener(v -> {
             try {
                 Intent intent = new Intent(holder.itemView.getContext(), RecetaActivity.class);
+                receta.setListaEtiquetas(new ArrayList<>());
                 intent.putExtra(InicioFragment.OBJ_RECETA, receta);
                 holder.itemView.getContext().startActivity(intent);
             } catch (Exception e) {
