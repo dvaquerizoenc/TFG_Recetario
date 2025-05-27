@@ -2,6 +2,7 @@ package com.dve.tfg_recetario.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -39,13 +41,18 @@ import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class RecetaActivity extends AppCompatActivity {
 
@@ -54,6 +61,9 @@ public class RecetaActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private AppCompatCheckBox cbFavoritos;
     private ImageButton btnEliminarReceta;
+    private MaterialButton addToCalendar, cancelCalendarBtn;
+
+    private MaterialCalendarView calendarViewDialog;
 
     private AdaptadorEtiquetasReceta adaptadorEtiquetas;
     private AdaptadorIngredientesReceta adaptadorIngredientes;
@@ -61,6 +71,18 @@ public class RecetaActivity extends AppCompatActivity {
     private TextView tvInstrucciones;
 
     private Receta receta;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Locale locale = new Locale("en");
+        Locale.setDefault(locale);
+
+        Configuration config = newBase.getResources().getConfiguration();
+        config.setLocale(locale);
+
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +98,7 @@ public class RecetaActivity extends AppCompatActivity {
         TextView tvNombre = findViewById(R.id.tvTituloReceta);
         RecyclerView rvEtiquetas = findViewById(R.id.rvEtiquetasReceta);
         btnEliminarReceta = findViewById(R.id.btn_eliminar_receta);
+        addToCalendar = findViewById(R.id.btnAddRecipeToCalendar);
 
         final ActivityResultLauncher<Intent> activityForResultLauncher =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -127,23 +150,25 @@ public class RecetaActivity extends AppCompatActivity {
             }
         }
 
-        db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        ArrayList<String> recientes = Usuario.getInstance().getRecientes();
-        boolean yaExiste = false;
-        for (String id : recientes) {
-            if (id.equals(String.valueOf(receta.getId()))) {
-                yaExiste = true;
+        if (!receta.isManual()) {
+            db = FirebaseFirestore.getInstance();
+            auth = FirebaseAuth.getInstance();
+            ArrayList<String> recientes = Usuario.getInstance().getRecientes();
+            boolean yaExiste = false;
+            for (String id : recientes) {
+                if (id.equals(String.valueOf(receta.getId()))) {
+                    yaExiste = true;
+                }
             }
+            if (!yaExiste) {
+                recientes.add(String.valueOf(receta.getId()));
+            } else {
+                recientes.remove(String.valueOf(receta.getId()));
+                recientes.add(String.valueOf(receta.getId()));
+            }
+            Usuario.getInstance().setRecientes(recientes);
+            db.collection("usuarios").document(auth.getUid()).update("recientes", recientes);
         }
-        if (!yaExiste) {
-            recientes.add(String.valueOf(receta.getId()));
-        } else {
-            recientes.remove(String.valueOf(receta.getId()));
-            recientes.add(String.valueOf(receta.getId()));
-        }
-        Usuario.getInstance().setRecientes(recientes);
-        db.collection("usuarios").document(auth.getUid()).update("recientes", recientes);
 
         Glide.with(imagen.getContext())
                 .load(receta.getImagen())
@@ -185,9 +210,11 @@ public class RecetaActivity extends AppCompatActivity {
                 intent.putExtra(InicioFragment.OBJ_RECETA, receta);
                 activityForResultLauncher.launch(intent);
             });
-
-
         }
+
+        addToCalendar.setOnClickListener(v -> {
+            loadDialogCalendar(this);
+        });
 
     }
 
@@ -293,6 +320,56 @@ public class RecetaActivity extends AppCompatActivity {
                     }
                 }
             });
+        });
+
+    }
+
+    public void loadDialogCalendar(Context context) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_calendar, null);
+
+        cancelCalendarBtn = dialogView.findViewById(R.id.btnCancelDialogCalendar);
+        calendarViewDialog = dialogView.findViewById(R.id.calendarViewSelecter);
+
+        progressDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        if (progressDialog.getWindow() != null) {
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        progressDialog.show();
+
+        calendarViewDialog.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                int year = date.getYear();
+                int month = date.getMonth();
+                int day = date.getDay();
+
+                String fechaSeleccionada = day + "/" + (month + 1) + "/" + year;
+                String fechaFirebase = year + "-" + (month + 1) + "-" + day;
+                Log.d("FECHA", "Seleccionaste: " + fechaSeleccionada);
+
+                GestorReceta.getInstance().subirRecetaCalendario(receta, fechaFirebase, auth, db, new GestorReceta.SubirFechaCallback() {
+                    @Override
+                    public void onResultado(boolean success) {
+                        if (success) {
+                            Toast.makeText(context, "You have selected the date" + fechaSeleccionada, Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        } else {
+                            Toast.makeText(context, "You can only have a maximum of 3 recipes per day", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            }
+        });
+
+        cancelCalendarBtn.setOnClickListener(v -> {
+            progressDialog.dismiss();
         });
 
     }

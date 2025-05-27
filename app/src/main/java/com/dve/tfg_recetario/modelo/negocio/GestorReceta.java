@@ -28,7 +28,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -108,6 +112,52 @@ public class GestorReceta {
             }
         });
     }
+
+    public void getAllRecetas(ApiCallback callback) {
+        Map<String, Receta> mapaRecetasUnicas = new HashMap<>();
+        List<Character> letras = new ArrayList<>();
+
+        for (char c = 'a'; c <= 'z'; c++) {
+            letras.add(c);
+        }
+
+        final int[] llamadasRestantes = {letras.size()};
+
+        for (char letra : letras) {
+            Call<RecetaResponse> call = restRecetaApiService.getRecetaByNombre(String.valueOf(letra));
+            call.enqueue(new Callback<RecetaResponse>() {
+                @Override
+                public void onResponse(Call<RecetaResponse> call, Response<RecetaResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body().getRecetas() != null) {
+                        for (Receta receta : response.body().getRecetas()) {
+                            mapaRecetasUnicas.put(String.valueOf(receta.getId()), receta); // ✅ siempre sobrescribe, evita duplicados por ID
+                        }
+                    }
+
+                    llamadasRestantes[0]--;
+
+                    if (llamadasRestantes[0] == 0) {
+                        List<Receta> recetasFinales = new ArrayList<>(mapaRecetasUnicas.values());
+                        callback.onTaskCompleted(recetasFinales);
+                        Log.d("TOTALES", "Recetas únicas por ID: " + recetasFinales.size());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RecetaResponse> call, Throwable t) {
+                    Log.e("API", "Error al cargar recetas por letra: " + letra, t);
+                    llamadasRestantes[0]--;
+
+                    if (llamadasRestantes[0] == 0) {
+                        List<Receta> recetasFinales = new ArrayList<>(mapaRecetasUnicas.values());
+                        callback.onTaskCompleted(recetasFinales);
+                    }
+                }
+            });
+        }
+    }
+
+
 
     public void getRecetasByCategoria(String categoria, ApiCallback callback) {
         List<Receta> lista = new ArrayList<>();
@@ -265,8 +315,36 @@ public class GestorReceta {
         });
     }
 
+    public void subirRecetaCalendario(Receta receta, String fecha, FirebaseAuth auth, FirebaseFirestore db, SubirFechaCallback callback) {
+        daoReceta.subirRecetaCalendario(receta, fecha, auth, db, new DaoReceta.UploadDateCallback() {
+            @Override
+            public void onSuccess() {
+                Log.d("SE HIZO", "Seee");
+                callback.onResultado(true);
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.d("SE HIZO", "Noo");
+                callback.onResultado(false);
+            }
+        });
+    }
+
+    public void eliminarRecetaCalendario(String recetaId, String fecha, FirebaseAuth auth, FirebaseFirestore db, EliminarRecetaCallback callback) {
+        daoReceta.eliminarRecetaCalendario(recetaId, fecha, auth, db, new DaoReceta.DeleteCallback() {
+            @Override
+            public void onDeleteResult(boolean success, String errorMessage) {
+                callback.onResultadoEliminacion(success, errorMessage);
+            }
+        });
+    }
+
     public interface EliminarRecetaCallback {
         void onResultadoEliminacion(boolean success, String errorMessage);
+    }
+
+    public interface SubirFechaCallback {
+        void onResultado(boolean success);
     }
 
 }

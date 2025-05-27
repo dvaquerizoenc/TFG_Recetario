@@ -26,13 +26,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btn_reload_random"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:backgroundTint="@color/transparente"
-            android:src="@drawable/ic_categorias"
+            android:src="@drawable/ic_dado"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +64,7 @@
             app:searchIcon="@drawable/ic_search" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/ten_random_recipes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -89,7 +89,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/ten_random_recipes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

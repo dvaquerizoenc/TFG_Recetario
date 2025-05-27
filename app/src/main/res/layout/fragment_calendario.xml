@@ -24,7 +24,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         app:mcv_arrowColor="@color/titulos"
         app:mcv_dateTextAppearance="@color/titulos"
         app:mcv_selectionColor="@color/secundario"

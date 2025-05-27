@@ -89,6 +89,9 @@
     <!-- HistorialActivty -->
     <string name="historial_title">History</string>"
 
+    <!-- CalendarFragment -->
+    <string name="no_recetas_calendario">There are no recipes on this day</string>
+
     <!-- PerfilDialog -->
     <string name="edit_profile">Edit Profile</string>
     <string name="recipes_recently">Your recently viewed recipes</string>

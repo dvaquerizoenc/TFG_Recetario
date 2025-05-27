@@ -8,11 +8,17 @@ import com.dve.tfg_recetario.modelo.entidad.Ingrediente;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -160,7 +166,96 @@ public class DaoReceta {
                 });
     }
 
+    public void subirRecetaCalendario(Receta receta, String fecha, FirebaseAuth auth, FirebaseFirestore db, UploadDateCallback callback) {
+        if (auth.getCurrentUser() == null) {
+            callback.onFailure(new Exception("Usuario no autenticado"));
+            return;
+        }
 
+        String userId = auth.getUid();
+
+        String recetaId = String.valueOf(receta.getId());
+        if (recetaId == null || recetaId.equals("0") || recetaId.trim().isEmpty()) {
+            recetaId = receta.getIdManual();
+        }
+
+        if (recetaId == null || recetaId.trim().isEmpty()) {
+            callback.onFailure(new Exception("ID de receta inválido"));
+            return;
+        }
+
+        DocumentReference calendarioRef = db
+                .collection("usuarios")
+                .document(userId)
+                .collection("calendario")
+                .document(fecha);
+
+        // Leer el documento antes de guardar
+        String finalRecetaId = recetaId;
+        calendarioRef.get().addOnSuccessListener(documentSnapshot -> {
+            List<String> recetasExistentes = new ArrayList<>();
+
+            if (documentSnapshot.exists() && documentSnapshot.contains("receta")) {
+                recetasExistentes = (List<String>) documentSnapshot.get("receta");
+            }
+
+            // Verificar si ya hay 3 recetas
+            if (recetasExistentes != null && recetasExistentes.size() >= 3) {
+                callback.onFailure(new Exception("Ya hay 3 recetas para esta fecha"));
+                return;
+            }
+
+            // Guardar la nueva receta
+            Map<String, Object> data = new HashMap<>();
+            data.put("receta", FieldValue.arrayUnion(finalRecetaId));
+
+            calendarioRef.set(data, SetOptions.merge())
+                    .addOnSuccessListener(unused -> callback.onSuccess())
+                    .addOnFailureListener(callback::onFailure);
+        }).addOnFailureListener(callback::onFailure);
+    }
+
+    public void eliminarRecetaCalendario(String recetaId, String fecha, FirebaseAuth auth, FirebaseFirestore db, DeleteCallback callback) {
+        DocumentReference docRef = db.collection("usuarios")
+                .document(auth.getUid())
+                .collection("calendario")
+                .document(fecha);
+
+        // Paso 1: eliminar receta del array
+        docRef.update("receta", FieldValue.arrayRemove(recetaId))
+                .addOnSuccessListener(aVoid -> {
+                    // Paso 2: consultar el documento actualizado
+                    docRef.get().addOnSuccessListener(documentSnapshot -> {
+                        List<String> recetas = (List<String>) documentSnapshot.get("receta");
+
+                        if (recetas == null || recetas.isEmpty()) {
+                            // Paso 3: si está vacío, eliminar el documento completo
+                            docRef.delete()
+                                    .addOnSuccessListener(aVoid2 -> {
+                                        Log.d("Firebase", "Documento eliminado por estar vacío.");
+                                        callback.onDeleteResult(true, "");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("Firebase", "Error al eliminar documento vacío", e);
+                                        callback.onDeleteResult(false, e.getMessage());
+                                    });
+                        } else {
+                            // Solo se eliminó del array, documento sigue con otras recetas
+                            callback.onDeleteResult(true, "");
+                        }
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Error al eliminar receta", e);
+                    callback.onDeleteResult(false, e.getMessage());
+                });
+    }
+
+
+    public interface UploadDateCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
 
     public interface UploadCallback {
         void onUploadResult(boolean success);

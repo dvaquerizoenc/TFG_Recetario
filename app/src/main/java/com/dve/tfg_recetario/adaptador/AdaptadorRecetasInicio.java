@@ -106,6 +106,16 @@ public class AdaptadorRecetasInicio extends RecyclerView.Adapter<AdaptadorReceta
         }
     }
 
+    public void vacialLista() {
+        listaRecetas.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setListaRecetas(List<Receta> listaRecetas) {
+        this.listaRecetas = new ArrayList<>(listaRecetas);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return listaRecetas.size();

@@ -140,28 +140,12 @@
             app:layout_constraintTop_toBottomOf="@id/textView3" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStartCoocking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="32dp"
-            android:backgroundTint="@color/generico"
-            android:fontFamily="@font/epilogue_bold"
-            android:paddingVertical="12dp"
-            android:text="@string/start"
-            android:textColor="@color/textBtn"
-            android:textSize="18sp"
-            app:cornerRadius="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvInstrucciones" />
-
-        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddRecipeToCalendar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.5"
-            android:layout_marginVertical="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="12dp"
             android:backgroundTint="@color/texto"
             android:fontFamily="@font/epilogue_bold"
             android:paddingVertical="12dp"
@@ -172,7 +156,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnStartCoocking" />
+            app:layout_constraintTop_toBottomOf="@+id/tvInstrucciones" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
