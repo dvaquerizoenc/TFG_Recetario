@@ -27,15 +27,11 @@ import com.dve.tfg_recetario.fragments.FavoritosFragment;
 import com.dve.tfg_recetario.fragments.InicioFragment;
 import com.dve.tfg_recetario.fragments.MisRecetasFragment;
 import com.dve.tfg_recetario.fragments.PerfilFragment;
-import com.dve.tfg_recetario.modelo.entidad.ListaCategorias;
 import com.dve.tfg_recetario.modelo.entidad.ListaRecetasFavoritas;
 import com.dve.tfg_recetario.modelo.entidad.ListaRecetasRandom;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
-import com.dve.tfg_recetario.modelo.negocio.GestorListaCategorias;
-import com.dve.tfg_recetario.modelo.negocio.GestorMiReceta;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
-import com.dve.tfg_recetario.modelo.servicio.ApiCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,16 +44,25 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Menú inferior
     private BottomNavigationView bottomNavigationView = null;
+    // Font regular
     private Typeface fuenteRegular = null;
-    private Typeface fuenteSeleccionada = null;
+    // Dialog de carga
     private AlertDialog progressDialog = null;
+    // Objeto que conecta con la BBDD
     private FirebaseFirestore db;
+    // Objeto que conecta con el login de la BBDD
     private FirebaseUser currentUser;
+    // Ultimo fragment
     private String lastFragment;
+    // Información local de la app
     private SharedPreferences prefs;
-    private Integer tema;
 
+    /**
+     * Establece el idioma predeterminado de la aplicación a inglés
+     * antes de que el contexto base sea establecido.
+     */
     @Override
     protected void attachBaseContext(Context newBase) {
         Locale locale = new Locale("en");
@@ -74,17 +79,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        boolean launchedFromScratch = savedInstanceState == null;
+
+        // DEFINICION / INICIALIZACION DE VARIABLES
+        boolean lanzadaDesdeMemoria = savedInstanceState == null;
 
         bottomNavigationView = findViewById(R.id.menu_bottom);
         fuenteRegular = ResourcesCompat.getFont(this, R.font.epilogue_regular);
-        fuenteSeleccionada = ResourcesCompat.getFont(this, R.font.epilogue_bold);
 
-        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE);
-        if (launchedFromScratch) {
-            prefs.edit().remove("last_fragment").apply();
-        }
-        lastFragment = prefs.getString("last_fragment", "Home");
+
+        // INICIO
+        iniciarPreferencias(lanzadaDesdeMemoria);
 
         loadUser();
 
@@ -92,14 +96,11 @@ public class MainActivity extends AppCompatActivity {
             loadDialog();
         }
 
-        initBottomNV();
+        iniciarBottomNV();
+
         ListaRecetasRandom.getInstance().inicializar();
 
-
-        if(ListaCategorias.getInstance().getListaCategorias() == null) {
-            ListaCategorias.getInstance().inicializar();
-        }
-        iniciarGestores();
+        iniciarGestoresFragments();
 
         ListaRecetasFavoritas.getInstance().inicializar();
 
@@ -144,22 +145,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void iniciarGestores() {
-        GestorReceta.getInstance().inicializar();
-        GestorListaCategorias.getInstance().inicializar();
-        GestorListaCategorias.getInstance().initListaCategorias(new ApiCallback() {
-            @Override
-            public void onTaskCompleted(String result) {
-                if(lastFragment.equals("Perfil")) {
-                    cambiarFragment(new PerfilFragment());
-                } else {
-                    cambiarFragment(new InicioFragment(progressDialog));
-                }
-            }
-        });
+    /**
+     * Función para iniciar la app con el fragmento principal o otro fragmento según la forma en la que se inicia la app
+     * @param lanzadaDesdeMemoria valor booleano que indica si la app fue lanzada desde 0 o desde memoria (por una accion de la aplicación)
+     */
+    private void iniciarPreferencias(boolean lanzadaDesdeMemoria) {
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        if (lanzadaDesdeMemoria) {
+            prefs.edit().remove("last_fragment").apply();
+        }
+        lastFragment = prefs.getString("last_fragment", "Home");
     }
 
-    private void initBottomNV(){
+    /**
+     * Función para inicializar gestores y el primer fragment en mostrarse
+     */
+    private void iniciarGestoresFragments() {
+        GestorReceta.getInstance().inicializar();
+
+        if(lastFragment.equals("Perfil")) {
+            cambiarFragment(new PerfilFragment());
+        } else {
+            cambiarFragment(new InicioFragment(progressDialog));
+        }
+    }
+
+    /**
+     * Inicia el menu inferior
+     */
+    private void iniciarBottomNV(){
         for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             MenuItem item = bottomNavigationView.getMenu().getItem(i);
             View view = bottomNavigationView.findViewById(item.getItemId());
@@ -170,7 +184,11 @@ public class MainActivity extends AppCompatActivity {
         }
         bottomNavigationView.setItemIconTintList(null);
     }
-    
+
+    /**
+     * Función para cambiar entre fragments
+     * @param fragment fragment al que se desea cambiar
+     */
     public void cambiarFragment(Fragment fragment) {
         if (!isFinishing() && !isDestroyed()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -179,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga un dialog de carga con ...
+     */
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_progress, null);
@@ -213,6 +234,9 @@ public class MainActivity extends AppCompatActivity {
         handler.post(runnable);
     }
 
+    /**
+     * Función que carga el usuario actual
+     */
     private void loadUser() {
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();

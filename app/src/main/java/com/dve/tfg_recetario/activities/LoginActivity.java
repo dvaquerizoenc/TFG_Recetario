@@ -24,12 +24,17 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // Objeto que conecta con el login de la BBDD
     private FirebaseAuth auth;
-
-    MaterialButton btnLogin;
-    TextInputEditText email;
-    TextInputEditText password;
-
+    // Boton de login
+    private MaterialButton btnLogin;
+    // Boton para crear cuenta
+    private Button tvCrearCuenta;
+    // EditText email
+    private TextInputEditText email;
+    // EditText password
+    private TextInputEditText password;
+    // He olvidado mi contraseña
     TextView forgotPassword;
 
     @Override
@@ -37,13 +42,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // DEFINICION / INICIALIZACION DE VARIABLES
         btnLogin = findViewById(R.id.signing_btn);
+        tvCrearCuenta = findViewById(R.id.tvCrearCuenta);
         email = findViewById(R.id.email_signin);
         password = findViewById(R.id.password_signin);
         forgotPassword = findViewById(R.id.forgot_password);
-
         auth = FirebaseAuth.getInstance();
 
+        // INICIO
         btnLogin.setOnClickListener(view -> {
             String emailText = email.getText().toString();
             String passwordText = password.getText().toString();
@@ -92,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button tvCrearCuenta = findViewById(R.id.tvCrearCuenta);
+
         tvCrearCuenta.setOnClickListener(view -> {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);

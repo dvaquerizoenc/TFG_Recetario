@@ -1,15 +1,11 @@
 package com.dve.tfg_recetario.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -42,7 +38,6 @@ import com.dve.tfg_recetario.fragments.InicioFragment;
 import com.dve.tfg_recetario.modelo.entidad.Ingrediente;
 import com.dve.tfg_recetario.modelo.entidad.LoadDialog;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
-import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.dve.tfg_recetario.modelo.negocio.GestorMiReceta;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
 import com.google.android.flexbox.FlexDirection;

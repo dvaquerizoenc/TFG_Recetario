@@ -30,33 +30,52 @@ import java.util.Objects;
 
 public class HistorialActivity extends AppCompatActivity {
 
+    // Boton cerrar activity
     ImageButton btnAtras;
+    // RV con las recetas
     RecyclerView rvRecetasHistorial;
-    FirebaseFirestore db;
-    FirebaseAuth auth;
+    // Adaptador usado para el RV
     AdaptadorHistorialRecetas adaptadorHistorialRecetas;
+    // Objeto que conecta con la BBDD
+    FirebaseFirestore db;
+    // Objeto que conecta con el login de la BBDD
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial);
 
+        // DEFINICION / INICIALIZACION DE VARIABLES
         btnAtras = findViewById(R.id.btn_atras_historial);
         rvRecetasHistorial = findViewById(R.id.rv_recetas_historial);
-
-        btnAtras.setOnClickListener(view -> {
-            finish();
-        });
-
-        rvRecetasHistorial.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+
+        // INICIO
+        iniciarListeners();
+
+        rvRecetasHistorial.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         cargarRecetasRecientes(db, Objects.requireNonNull(auth.getCurrentUser()));
 
     }
 
-    public void cargarRecetasRecientes(FirebaseFirestore db, FirebaseUser currentUser) {
+    /**
+     * Inicializador de todos los listener de la actividad
+     */
+    private void iniciarListeners(){
+        btnAtras.setOnClickListener(view -> {
+            finish();
+        });
+    }
+
+    /**
+     * Función que busca, devuelve  y carga las recetas recientes del usuario
+     * @param db Objeto de la BBDD
+     * @param currentUser Usuario actual logeado
+     */
+    private void cargarRecetasRecientes(FirebaseFirestore db, FirebaseUser currentUser) {
         db.collection("usuarios").document(currentUser.getUid())
                 .addSnapshotListener((documentSnapshot, error) -> {
                     if (error != null) {
@@ -71,7 +90,8 @@ public class HistorialActivity extends AppCompatActivity {
 
                         if (recientesFirestore == null || recientesFirestore.isEmpty()) return;
 
-                        usuario.setRecientes((ArrayList<String>) recientesFirestore); // <- Actualiza el objeto Usuario
+                        // Actualiza el objeto usuario
+                        usuario.setRecientes((ArrayList<String>) recientesFirestore);
 
                         // Invertir y cargar recetas
                         List<String> recientesInvertido = new ArrayList<>(recientesFirestore);
@@ -87,15 +107,21 @@ public class HistorialActivity extends AppCompatActivity {
                 });
     }
 
-
-
-
+    /**
+     * Función que carga las recetas de forma secuencial para lograr una especie de animación.
+     * Se utiliza a modo de blucle gracias a la recursividad
+     * @param recientes lista que guarda las recetas recientes
+     * @param index
+     * @param listaRecetas
+     * @param adaptador
+     * @param gestorReceta
+     */
     private void cargarRecetasSecuencialmente(List<String> recientes, int index,
                                               List<Receta> listaRecetas,
                                               AdaptadorHistorialRecetas adaptador,
                                               GestorReceta gestorReceta) {
 
-        if (index >= recientes.size()) return; // Caso base: terminamos
+        if (index >= recientes.size()) return;
 
         String id = recientes.get(index);
         gestorReceta.getRecetaById(id, new ApiCallback() {
@@ -108,7 +134,6 @@ public class HistorialActivity extends AppCompatActivity {
                     adaptador.notifyItemInserted(listaRecetas.size() - 1);
                 }
 
-                // Llamada recursiva: cargar el siguiente
                 cargarRecetasSecuencialmente(recientes, index + 1, listaRecetas, adaptador, gestorReceta);
             }
         });

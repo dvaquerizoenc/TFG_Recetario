@@ -23,7 +23,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +31,7 @@ import com.bumptech.glide.Glide;
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.adaptador.AdaptadorEtiquetasReceta;
 import com.dve.tfg_recetario.adaptador.AdaptadorIngredientesReceta;
-import com.dve.tfg_recetario.adaptador.AdaptadorInstruccionesReceta;
 import com.dve.tfg_recetario.fragments.InicioFragment;
-import com.dve.tfg_recetario.modelo.entidad.Ingrediente;
 import com.dve.tfg_recetario.modelo.entidad.Receta;
 import com.dve.tfg_recetario.modelo.entidad.Usuario;
 import com.dve.tfg_recetario.modelo.negocio.GestorReceta;
@@ -42,7 +39,6 @@ import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -50,7 +46,6 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -218,6 +213,10 @@ public class RecetaActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion para mostrar un dialog de carga durante un tiempo especificado
+     * @param duracion tiempo que durara el dialog
+     */
     public void loadDialog(int duracion) {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_progress, null);
@@ -257,6 +256,9 @@ public class RecetaActivity extends AppCompatActivity {
         }, duracion);
     }
 
+    /**
+     * Funcion que intenta dividir un string de instrucciones en varias lineas para mas legibilidad
+     */
     public void prepararInstrucciones() {
         if (receta.getListaInstrucciones() == null || receta.getListaInstrucciones().isEmpty()) {
             String instrucciones = receta.getInstrucciones();
@@ -282,6 +284,9 @@ public class RecetaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga el dialog para eliminar la receta
+     */
     public void loadDialogEliminarReceta() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_eliminar_receta, null);
@@ -324,6 +329,10 @@ public class RecetaActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Carga el dialog con el calendario
+     * @param context
+     */
     public void loadDialogCalendar(Context context) {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_calendar, null);

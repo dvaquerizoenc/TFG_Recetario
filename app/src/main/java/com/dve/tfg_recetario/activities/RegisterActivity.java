@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.recaptcha.RecaptchaException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -169,6 +168,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion para determinar si una contraseña es valida
+     * @param password contraseña que se desea comprobar
+     * @return
+     */
     public String isPasswordValid(String password) {
         if (password.length() < 8) {
             return "The password must be at least 8 characters long.";
@@ -186,6 +190,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion para mostrar el dialogo de carga
+     */
     public void loadDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_progress, null);

@@ -2,9 +2,6 @@ package com.dve.tfg_recetario.modelo.entidad;
 
 import androidx.appcompat.app.AlertDialog;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class LoadDialog {
     private static LoadDialog instance = null;
     private AlertDialog LoadDialog = null;
