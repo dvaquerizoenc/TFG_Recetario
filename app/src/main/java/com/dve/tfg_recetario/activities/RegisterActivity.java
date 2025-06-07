@@ -114,12 +114,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                             String fecha = "";
                                                             Calendar calendar = Calendar.getInstance();
                                                             fecha = "Joined " + calendar.get(Calendar.YEAR) + " - " + meses[calendar.get(Calendar.MONTH)];
+                                                            int temaSistema = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                                                            int temaGuardado = (temaSistema == Configuration.UI_MODE_NIGHT_YES) ? 32 : 16;
 
                                                             usuario.put("correo", emailText);
                                                             usuario.put("nombre", usernameText);
                                                             usuario.put("fechaCreacion", fecha);
                                                             usuario.put("imagenPerfil", "https://firebasestorage.googleapis.com/v0/b/tfg-recetario.firebasestorage.app/o/user_default.png?alt=media&token=06d7b771-0291-49f4-815b-cab5b784f432");
-                                                            usuario.put("tema", getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK);
+                                                            usuario.put("tema", temaGuardado);
                                                             usuario.put("recientes", Collections.emptyList());
                                                             usuario.put("favoritos", Collections.emptyList());
 
@@ -140,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     if (user != null) {
                                                         // Si el usuario ya está autenticado, lo llevamos a MainActivity
                                                         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         Toast.makeText(RegisterActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
                                                         startActivity(intent);
                                                         finish();
