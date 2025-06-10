@@ -198,8 +198,10 @@ public class Receta implements Serializable {
                         medidas.add(medida);
                     } else {
                         String ingrediente = (String) this.getClass().getDeclaredField("ingrediente" + cont).get(this);
-                        if(!ingrediente.trim().isEmpty()) {
-                            medidas.add("");
+                        if (ingrediente != null) {
+                            if(!ingrediente.trim().isEmpty()) {
+                                medidas.add("");
+                            }
                         }
                     }
                 } else {

@@ -314,6 +314,12 @@ public class RecetaActivity extends AppCompatActivity {
 
         btnConfirmar.setOnClickListener(v -> {
             Context context = this;
+            if (auth == null) {
+                auth = FirebaseAuth.getInstance();
+            }
+            if (db == null) {
+                db = FirebaseFirestore.getInstance();
+            }
             GestorReceta.getInstance().eliminarReceta(receta, auth, db, new GestorReceta.EliminarRecetaCallback() {
                 @Override
                 public void onResultadoEliminacion(boolean success, String errorMessage) {
@@ -362,11 +368,17 @@ public class RecetaActivity extends AppCompatActivity {
                 String fechaFirebase = year + "-" + (month + 1) + "-" + day;
                 Log.d("FECHA", "Seleccionaste: " + fechaSeleccionada);
 
+                if (auth == null) {
+                    auth = FirebaseAuth.getInstance();
+                }
+                if (db == null) {
+                    db = FirebaseFirestore.getInstance();
+                }
                 GestorReceta.getInstance().subirRecetaCalendario(receta, fechaFirebase, auth, db, new GestorReceta.SubirFechaCallback() {
                     @Override
                     public void onResultado(boolean success) {
                         if (success) {
-                            Toast.makeText(context, "You have selected the date" + fechaSeleccionada, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "You have selected the date " + fechaSeleccionada, Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         } else {
                             Toast.makeText(context, "You can only have a maximum of 3 recipes per day", Toast.LENGTH_SHORT).show();

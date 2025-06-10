@@ -75,6 +75,17 @@ public class CalendarioFragment extends Fragment {
         CollectionReference calendarioRef = db.collection("usuarios").document(userId).collection("calendario");
 
         calendarioRef.addSnapshotListener((querySnapshot, error) -> {
+            if (error != null) {
+                Log.e("CalendarioFragment", "Listen failed.", error);
+                return;
+            }
+            if (querySnapshot == null) {
+                Log.w("CalendarioFragment", "Snapshot es null");
+                return;
+            }
+
+            calendarView.removeDecorators();
+
             fechasConRecetas = new HashSet<>();
             listaDiasConReceta = new HashMap<>();
             for (DocumentSnapshot doc : querySnapshot.getDocuments()) {

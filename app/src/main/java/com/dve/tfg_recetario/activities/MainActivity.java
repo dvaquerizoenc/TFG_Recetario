@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -201,37 +202,41 @@ public class MainActivity extends AppCompatActivity {
      * Carga un dialog de carga con ...
      */
     public void loadDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_progress, null);
+        try {
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_progress, null);
 
-        progressDialog = new AlertDialog.Builder(this)
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
+            progressDialog = new AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .create();
 
-        LoadDialog.getInstance().inicializar(progressDialog);
+            LoadDialog.getInstance().inicializar(progressDialog);
 
-        TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
+            TextView tvProgressText = dialogView.findViewById(R.id.tvProgressText);
 
-        if (progressDialog.getWindow() != null) {
-            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
-
-        progressDialog.show();
-
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            int dotCount = 0;
-            @Override
-            public void run() {
-                String dots = new String(new char[dotCount % 4]).replace("\0", ".");
-                tvProgressText.setText(getString(R.string.progress_dialog) + dots);
-                dotCount++;
-                handler.postDelayed(this, 400); // Se repite cada 500ms
+            if (progressDialog.getWindow() != null) {
+                progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
-        };
 
-        handler.post(runnable);
+            progressDialog.show();
+
+            Handler handler = new Handler();
+            Runnable runnable = new Runnable() {
+                int dotCount = 0;
+                @Override
+                public void run() {
+                    String dots = new String(new char[dotCount % 4]).replace("\0", ".");
+                    tvProgressText.setText(getString(R.string.progress_dialog) + dots);
+                    dotCount++;
+                    handler.postDelayed(this, 400); // Se repite cada 500ms
+                }
+            };
+
+            handler.post(runnable);
+        } catch (Exception e) {
+            Log.e("ERROR", "Mensaje: " + e.getMessage());
+        }
     }
 
     /**

@@ -153,6 +153,9 @@ public class PerfilFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+            if(getActivity() != null) {
+                getActivity().finish();
+            }
         });
 
     }
