@@ -55,4 +55,5 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
     implementation(libs.material.calendarview)
+    implementation "androidx.core:core-ktx:1.12.0"
 }
