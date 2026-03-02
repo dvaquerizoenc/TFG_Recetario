@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.View;
 
 import com.dve.tfg_recetario.R;
 import com.dve.tfg_recetario.adaptador.AdaptadorHistorialRecetas;
